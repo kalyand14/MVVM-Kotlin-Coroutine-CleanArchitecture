@@ -1,8 +1,8 @@
+package com.android.basics.core.functional
+
 import com.android.basics.core.exception.Failure
-import com.android.basics.core.functional.ResourceStatus
 
-data class Resource<out T>(val status: ResourceStatus, val data: T?, val message: Failure?) {
-
+data class Resource<out T>(val status: ResourceStatus, val data: T?, val failure: Failure?) {
     companion object {
         fun <T> success(data: T?): Resource<T> {
             return Resource(ResourceStatus.SUCCESS, data, null)

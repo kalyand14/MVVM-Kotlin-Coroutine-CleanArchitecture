@@ -1,10 +1,10 @@
 package com.android.basics.features.presentation.home
 
-import Resource
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.android.basics.core.exception.Failure
+import com.android.basics.core.functional.Resource
 import com.android.basics.features.domain.interactor.todo.GetTodoListInteractor
 import com.android.basics.features.domain.model.Todo
 import kotlinx.coroutines.launch
@@ -18,9 +18,7 @@ class HomeScreenViewModel(
         MutableLiveData<Resource<List<Todo>>>()
 
     public fun onLoadTodoList(userId: String) {
-
         state.value = Resource.loading()
-
         viewModelScope.launch {
             getTodoListInteractor(userId) { it.fold(::handleError, ::handleTodoList) }
         }
