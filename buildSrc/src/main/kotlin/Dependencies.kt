@@ -12,6 +12,7 @@ object Versions {
     val material = "1.1.0-alpha04"
     val support = "1.0.0"
     val room = "2.1.0"
+    val androidx_lifecycle = "2.2.0"
     // </editor-fold>
 
     // <editor-fold desc="testing">
@@ -79,6 +80,9 @@ object Deps {
 
     val androidx_recyclerview =
         "androidx.recyclerview:recyclerview:${Versions.androidx_recyclerview}"
+
+    val androidx_lifecycle_viewmodel =
+        "androidx.lifecycle:lifecycle-viewmodel-ktx:${Versions.androidx_lifecycle}"
 
     // Room and Lifecycle dependencies
     val room_runtime = "androidx.room:room-runtime:${Versions.room}"

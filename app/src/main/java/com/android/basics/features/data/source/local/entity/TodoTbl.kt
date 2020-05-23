@@ -3,6 +3,7 @@ package com.android.basics.features.data.source.local.entity
 import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
+import com.android.basics.features.domain.model.Todo
 import java.util.*
 
 @Entity(tableName = "todo")
@@ -14,4 +15,12 @@ data class TodoTbl @JvmOverloads constructor(
     @ColumnInfo(name = "dueDate") var dueDate: String = "",
     @ColumnInfo(name = "isCompleted") var isCompleted: Boolean = false
 ) {
+    fun toTodo() = Todo(
+        todoId,
+        userId,
+        name,
+        description,
+        dueDate,
+        isCompleted
+    )
 }

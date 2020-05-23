@@ -25,7 +25,7 @@ interface TodoDao {
     fun update(todoTbl: TodoTbl): Int
 
     @Query("SELECT * from todo WHERE userId =:userId ORDER BY todoId DESC")
-    fun getAllTodo(userId: String): List<TodoTbl>?
+    fun getAllTodo(userId: String): List<TodoTbl>
 
     @Query("SELECT * from todo WHERE todoId =:todoId")
     fun getTodo(todoId: String): TodoTbl?

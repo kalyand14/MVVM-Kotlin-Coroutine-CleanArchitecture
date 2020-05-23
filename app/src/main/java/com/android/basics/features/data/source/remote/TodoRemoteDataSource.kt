@@ -1,8 +1,9 @@
 package com.android.basics.features.data.source.remote
 
+import com.android.basics.core.exception.Failure
+import com.android.basics.core.functional.Either
 import com.android.basics.features.Constants
 import com.android.basics.features.data.source.TodoDataSource
-import com.android.basics.features.domain.model.Result
 import com.android.basics.features.domain.model.Todo
 import kotlinx.coroutines.delay
 import java.util.*
@@ -14,23 +15,23 @@ object TodoRemoteDataSource : TodoDataSource {
 
     private var TODO_SERVICE_DATA = LinkedHashMap<String, Todo>(2)
 
-    override suspend fun getTodoList(userId: String): Result<List<Todo>> {
+    override suspend fun getTodoList(userId: String): Either<Failure, List<Todo>> {
         // Simulate network by delaying the execution.
         val tasks = TODO_SERVICE_DATA.values.toList()
         delay(SERVICE_LATENCY_IN_MILLIS)
-        return Result.Success(tasks)
+        return Either.Right(tasks)
     }
 
-    override suspend fun getTodo(todoId: String): Result<Todo> {
+    override suspend fun getTodo(todoId: String): Either<Failure, Todo> {
         // Simulate network by delaying the execution.
         delay(SERVICE_LATENCY_IN_MILLIS)
         TODO_SERVICE_DATA[todoId]?.let {
-            return Result.Success(it)
+            return Either.Right(it)
         }
-        return Result.Error(Exception(Constants.TODO_NOT_FOUND))
+        return Either.Left(Failure.DataError(Constants.NOT_FOUND))
     }
 
-    override suspend fun editTodo(todo: Todo): Result<Boolean> {
+    override suspend fun editTodo(todo: Todo): Either<Failure, Boolean> {
         val newTodo = Todo(
             todo.todoId,
             todo.userId,
@@ -41,10 +42,10 @@ object TodoRemoteDataSource : TodoDataSource {
         )
         TODO_SERVICE_DATA[todo.todoId] = newTodo
         delay(SERVICE_LATENCY_IN_MILLIS)
-        return Result.Success(true)
+        return Either.Right(true)
     }
 
-    override suspend fun addTodo(todo: Todo): Result<Boolean> {
+    override suspend fun addTodo(todo: Todo): Either<Failure, Boolean> {
         val newTodo = Todo(
             UUID.randomUUID().toString(),
             todo.userId,
@@ -55,18 +56,17 @@ object TodoRemoteDataSource : TodoDataSource {
         )
         TODO_SERVICE_DATA[newTodo.todoId] = newTodo
         delay(SERVICE_LATENCY_IN_MILLIS)
-        return Result.Success(true)
+        return Either.Right(true)
     }
 
-    override suspend fun deleteTodo(todoId: String): Result<Boolean> {
+    override suspend fun deleteTodo(todoId: String): Either<Failure, Boolean> {
         TODO_SERVICE_DATA.remove(todoId)
         delay(SERVICE_LATENCY_IN_MILLIS)
-        return Result.Success(true)
+        return Either.Right(true)
     }
 
     override suspend fun deleteAllTodo() {
         TODO_SERVICE_DATA.clear()
     }
-
 
 }
