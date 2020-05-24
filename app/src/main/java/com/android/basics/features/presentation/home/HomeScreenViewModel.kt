@@ -5,13 +5,13 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.android.basics.core.exception.Failure
 import com.android.basics.core.functional.Resource
-import com.android.basics.features.domain.interactor.todo.GetTodoListInteractor
+import com.android.basics.features.domain.interactor.todo.GetTodoListUseCase
 import com.android.basics.features.domain.model.Todo
 import kotlinx.coroutines.launch
 
 
 class HomeScreenViewModel(
-    private val getTodoListInteractor: GetTodoListInteractor
+    private val getTodoListUseCase: GetTodoListUseCase
 ) : ViewModel() {
 
     val state: MutableLiveData<Resource<List<Todo>>> =
@@ -20,7 +20,7 @@ class HomeScreenViewModel(
     public fun onLoadTodoList(userId: String) {
         state.value = Resource.loading()
         viewModelScope.launch {
-            getTodoListInteractor(userId) { it.fold(::handleError, ::handleTodoList) }
+            getTodoListUseCase(userId) { it.fold(::handleError, ::handleTodoList) }
         }
     }
 

@@ -6,10 +6,10 @@ buildscript {
         maven { url "https://plugins.gradle.org/m2/" }
     }
     dependencies {
-        classpath Deps.tools_gradleandroid
-        classpath Deps.tools_kotlin
-        classpath Deps.tools_gradleversions
-        classpath Deps.tools_navigation_safe_args
+        classpath ToolsDeps.gradleandroid
+        classpath ToolsDeps.kotlin
+        classpath ToolsDeps.gradleversions
+        classpath ToolsDeps.navigation_safe_args
     }
 }
 allprojects {
@@ -26,18 +26,18 @@ subprojects {
             apply plugin: "com.github.ben-manes.versions"
 
             android {
-                buildToolsVersion Deps.build_buildTools
-                compileSdkVersion Deps.build_compileSdk
+                buildToolsVersion Versions.build_buildTools
+                compileSdkVersion Versions.build_compileSdk
 
                 defaultConfig {
-                    minSdkVersion Deps.build_minSdk
-                    targetSdkVersion Deps.build_targetSdk
+                    minSdkVersion Versions.build_minSdk
+                    targetSdkVersion Versions.build_targetSdk
                     testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
                 }
 
                 compileOptions {
-                    sourceCompatibility Deps.build_javaVersion
-                    targetCompatibility Deps.build_javaVersion
+                    sourceCompatibility Versions.build_javaVersion
+                    targetCompatibility Versions.build_javaVersion
                 }
 
                 buildTypes {
@@ -47,7 +47,7 @@ subprojects {
                 }
 
                 kotlinOptions {
-                    jvmTarget = Deps.build_javaVersion
+                    jvmTarget = Versions.build_javaVersion
                 }
             }
         }
