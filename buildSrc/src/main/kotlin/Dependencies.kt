@@ -31,10 +31,8 @@ object Versions {
 
     val coroutines = "1.3.7"
 
-    val hamcrest = "1.3"
-
-    val mockito = "2.19.0"
-
+    val mockk = "1.10.0"
+    val kluent = "1.14"
 
     val paper_db = "2.6"
     val paper_rx = "1.4.0"
@@ -110,9 +108,8 @@ object UnitTestDeps {
     val robolectric = "org.robolectric:robolectric:${Versions.robolectric}"
     val junit = "junit:junit:${Versions.junit}"
 
-    val mockito = "org.mockito:mockito-core:${Versions.mockito}"
-    val hamcrest = "org.hamcrest:hamcrest-all:${Versions.hamcrest}"
-    val arch_core = "androidx.arch.core:core-testing${Versions.hamcrest}"
+    val mockk = "io.mockk:mockk:${Versions.mockk}"
+    val kluent = "org.amshove.kluent:kluent:${Versions.kluent}"
 }
 
 object AcceptanceTestDeps {

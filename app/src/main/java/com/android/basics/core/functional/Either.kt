@@ -1,5 +1,9 @@
 package com.android.basics.core.functional
 
+import com.android.basics.core.exception.Failure
+import com.android.basics.core.functional.Either.Left
+import com.android.basics.core.functional.Either.Right
+
 /**
  * Represents a value of one of two possible types (a disjoint union).
  * Instances of [Either] are either an instance of [Left] or [Right].
@@ -50,6 +54,17 @@ sealed class Either<out L, out R> {
             is Left -> fnL(a)
             is Right -> fnR(b)
         }
+
+    companion object Factory {
+        //higher order functions take functions as parameters or return a function
+        //Kotlin has function types name: () -> V
+        inline fun <R> build(function: () -> R): Either<Failure, R> =
+            try {
+                Right(function.invoke())
+            } catch (e: java.lang.Exception) {
+                Left(Failure.Error(e))
+            }
+    }
 }
 
 /**

@@ -24,8 +24,8 @@ dependencies {
     testImplementation UnitTestDeps.kotlinTest
     testImplementation UnitTestDeps.robolectric
     testImplementation UnitTestDeps.junit
-    testImplementation UnitTestDeps.mockito
-    testImplementation UnitTestDeps.hamcrest
+    testImplementation UnitTestDeps.mockk
+    testImplementation UnitTestDeps.kluent
 
     //Acceptance tests dependencies
     androidTestImplementation AcceptanceTestDeps.testRunner

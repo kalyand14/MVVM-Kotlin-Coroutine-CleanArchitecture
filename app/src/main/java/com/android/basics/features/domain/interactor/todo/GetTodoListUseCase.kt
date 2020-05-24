@@ -7,8 +7,10 @@ import com.android.basics.features.domain.model.Todo
 import com.android.basics.features.domain.repository.TodoRepository
 
 class GetTodoListUseCase(private val todoRepository: TodoRepository) :
-    UseCase<List<Todo>, String>() {
-    override suspend fun run(params: String): Either<Failure, List<Todo>> {
-        return todoRepository.getTodoList(params)
+    UseCase<List<Todo>, GetTodoListUseCase.Params>() {
+    override suspend fun run(params: Params): Either<Failure, List<Todo>> {
+        return todoRepository.getTodoList(params.userId)
     }
+
+    data class Params(val userId: String)
 }

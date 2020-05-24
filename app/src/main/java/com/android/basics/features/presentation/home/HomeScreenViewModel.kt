@@ -20,7 +20,12 @@ class HomeScreenViewModel(
     public fun onLoadTodoList(userId: String) {
         state.value = Resource.loading()
         viewModelScope.launch {
-            getTodoListUseCase(userId) { it.fold(::handleError, ::handleTodoList) }
+            getTodoListUseCase(GetTodoListUseCase.Params(userId)) {
+                it.fold(
+                    ::handleError,
+                    ::handleTodoList
+                )
+            }
         }
     }
 
