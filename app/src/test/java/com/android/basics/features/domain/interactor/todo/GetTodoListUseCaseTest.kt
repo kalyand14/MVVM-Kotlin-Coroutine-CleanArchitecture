@@ -1,52 +1,80 @@
 package com.android.basics.features.domain.interactor.todo
 
+import com.android.basics.MainCoroutineRule
 import com.android.basics.TestDataFactory
 import com.android.basics.core.exception.Failure
 import com.android.basics.core.functional.Either
 import com.android.basics.features.domain.model.Todo
 import com.android.basics.features.domain.repository.TodoRepository
-import io.mockk.coEvery
-import io.mockk.coVerify
-import io.mockk.mockk
-import kotlinx.coroutines.runBlocking
-import org.amshove.kluent.shouldBe
+import com.google.common.truth.Truth.assertThat
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.test.runBlockingTest
+import org.junit.Before
+import org.junit.Rule
 import org.junit.Test
+import org.mockito.Mock
+import org.mockito.Mockito.`when`
+import org.mockito.Mockito.verify
+import org.mockito.MockitoAnnotations
 
+@ExperimentalCoroutinesApi
 class GetTodoListUseCaseTest {
 
-    val todoRepository: TodoRepository = mockk()
+    private lateinit var useCase: GetTodoListUseCase
 
-    val useCase: GetTodoListUseCase = GetTodoListUseCase(todoRepository)
+    @Mock
+    private lateinit var repository: TodoRepository
 
-    @Test
-    fun `On Get Todos Successful`() {
-        runBlocking {
-            //1 Set up Test data and mock responses
-            val userId = TestDataFactory.getUserId()
-            val testList =
-                listOf(
-                    TestDataFactory.getTodo(),
-                    TestDataFactory.getTodo(),
-                    TestDataFactory.getTodo()
-                )
+    @get:Rule
+    var mainCoroutineRule = MainCoroutineRule()
 
-            coEvery { todoRepository.getTodoList(userId) } returns Either.build { testList }
-
-            //2 Call the Unit to be tested
-            val result: Either<Failure, List<Todo>> =
-                useCase.run(GetTodoListUseCase.Params(userId))
-
-            //3 Verify behaviour and state
-            coVerify { todoRepository.getTodoList(userId) }
-
-            result.isLeft shouldBe false
-            result.fold({},
-                { right ->
-                    right shouldBe testList
-                })
-
-        }
+    @Before
+    fun setUp() {
+        MockitoAnnotations.initMocks(this);
+        useCase = GetTodoListUseCase(repository)
     }
 
+    @Test
+    fun `On Get Todo List Successful for empty list`() = mainCoroutineRule.runBlockingTest {
+        `when`(repository.getTodoList(TestDataFactory.getUserId())).thenReturn(Either.build { emptyList<Todo>() })
+        useCase.run(GetTodoListUseCase.Params(TestDataFactory.getUserId()))
+        verify(repository).getTodoList(TestDataFactory.getUserId())
+    }
+
+    @Test
+    fun `On Get Todo List Successful for actual list`() = mainCoroutineRule.runBlockingTest {
+        val testList =
+            mutableListOf(
+                TestDataFactory.getTodo(todoId = "1"),
+                TestDataFactory.getTodo(todoId = "2"),
+                TestDataFactory.getTodo(todoId = "3")
+            )
+
+        `when`(repository.getTodoList(TestDataFactory.getUserId())).thenReturn(Either.Right(testList))
+        val result = useCase.run(GetTodoListUseCase.Params(TestDataFactory.getUserId()))
+        verify(repository).getTodoList(TestDataFactory.getUserId())
+        assertThat(result.isRight).isTrue()
+        val value = result.fold({}, { it }) as List<*>
+        assertThat(value.size).isEqualTo(3)
+
+    }
+
+    @Test
+    fun `On Get Todo List failure`() = mainCoroutineRule.runBlockingTest {
+        `when`(repository.getTodoList(TestDataFactory.getUserId())).thenReturn(
+            Either.Left(
+                Failure.DataError(
+                    TestDataFactory.NOT_FOUND
+                )
+            )
+        )
+        val result = useCase.run(GetTodoListUseCase.Params(TestDataFactory.getUserId()))
+        verify(repository).getTodoList(TestDataFactory.getUserId())
+        assertThat(result.isLeft).isTrue()
+
+
+        val value = result.fold({ it }, { }) as Failure.DataError
+        assertThat(value.error).isEqualTo(TestDataFactory.NOT_FOUND)
+    }
 
 }

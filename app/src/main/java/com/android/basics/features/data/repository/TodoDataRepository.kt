@@ -2,15 +2,14 @@ package com.android.basics.features.data.repository
 
 import com.android.basics.core.exception.Failure
 import com.android.basics.core.functional.Either
-import com.android.basics.features.data.source.local.TodoLocalDataSource
-import com.android.basics.features.data.source.remote.TodoRemoteDataSource
+import com.android.basics.features.data.source.TodoDataSource
 import com.android.basics.features.domain.model.Todo
 import com.android.basics.features.domain.repository.TodoRepository
 import kotlinx.coroutines.*
 
-class TodoRepository(
-    private val todoLocalDataSource: TodoLocalDataSource,
-    private val todoRemoteDataSource: TodoRemoteDataSource,
+class TodoDataRepository(
+    private val todoLocalDataSource: TodoDataSource,
+    private val todoRemoteDataSource: TodoDataSource,
     private val ioDispatcher: CoroutineDispatcher = Dispatchers.IO
 ) : TodoRepository {
 

@@ -7,6 +7,8 @@ class TestDataFactory {
 
     companion object Factory {
 
+        const val NOT_FOUND = "not found"
+
         fun getUserId() = "1"
 
         fun getTodo(

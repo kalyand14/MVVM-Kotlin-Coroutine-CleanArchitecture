@@ -9,30 +9,69 @@ dependencies {
     implementation ApplicationDeps.kotlin
     implementation ApplicationDeps.kotlinCoroutines
     implementation ApplicationDeps.kotlinCoroutinesAndroid
-    implementation ApplicationDeps.appCompat
-    implementation ApplicationDeps.constraintLayout
-    implementation ApplicationDeps.cardView
-    implementation ApplicationDeps.recyclerView
-    implementation ApplicationDeps.material
+    implementation ApplicationDeps.androidXAppCompat
+    implementation ApplicationDeps.androidXConstraintLayout
+    implementation ApplicationDeps.androidXCard
+    implementation ApplicationDeps.androidXRecyclerview
+    implementation ApplicationDeps.androidXMaterial
+    implementation ApplicationDeps.androidXAnnotations
+    implementation ApplicationDeps.androidXLegacySupport
 
-    implementation ApplicationDeps.roomRuntime
-    kapt ApplicationDeps.roomCompiler
+    // Architecture Components
+    implementation ApplicationDeps.androidXRoom
+    kapt ApplicationDeps.androidXRoomCompiler
+    implementation ApplicationDeps.androidXRoomKtx
     implementation ApplicationDeps.lifecycleViewmodel
 
-    //Unit/Integration tests dependencies
-    testImplementation UnitTestDeps.kotlin
-    testImplementation UnitTestDeps.kotlinTest
-    testImplementation UnitTestDeps.robolectric
-    testImplementation UnitTestDeps.junit
-    testImplementation UnitTestDeps.mockk
-    testImplementation UnitTestDeps.kluent
+    //JVM Unit tests dependencies
+    testImplementation JvmUnitTestDeps.junit
+    testImplementation JvmUnitTestDeps.mockitoCore
+    testImplementation JvmUnitTestDeps.archCoreTest
+    testImplementation JvmUnitTestDeps.kotlinCoroutinesAndroid
+    testImplementation JvmUnitTestDeps.kotlinCoroutinesTest
+    testImplementation JvmUnitTestDeps.robolectric
+    testImplementation JvmUnitTestDeps.espressoCore
+    testImplementation JvmUnitTestDeps.espressoContrib
+    testImplementation JvmUnitTestDeps.espressoIntents
+    testImplementation JvmUnitTestDeps.truth
 
-    //Acceptance tests dependencies
-    androidTestImplementation AcceptanceTestDeps.testRunner
-    androidTestImplementation AcceptanceTestDeps.testRules
-    implementation AcceptanceTestDeps.espresssIdling
-    androidTestImplementation AcceptanceTestDeps.espressoCore
-    androidTestImplementation AcceptanceTestDeps.espressoIntents
+    //Android Unit tests dependencies
+    androidTestImplementation AndroidUnitTestDeps.junit
+    androidTestImplementation AndroidUnitTestDeps.mockito
+    androidTestImplementation AndroidUnitTestDeps.dexMaker
+    androidTestImplementation AndroidUnitTestDeps.kotlinCoroutinesTest
+
+    //AndroidX Test - JVM/Robolectric testing
+    testImplementation AndroidTestDeps.testCore
+    testImplementation AndroidTestDeps.testJunitExt
+    testImplementation AndroidTestDeps.testRule
+    testImplementation AndroidTestDeps.robolectric
+    //To test fragment in isolation, below dependencies are needed
+    implementation AndroidTestDeps.fragment
+    implementation AndroidTestDeps.fragmentTest
+    implementation AndroidTestDeps.testCorePlain
+
+    //AndroidX Test - Instrumented testing
+    androidTestImplementation AndroidTestDeps.testCore
+    androidTestImplementation AndroidTestDeps.testJunitExt
+    androidTestImplementation AndroidTestDeps.testRule
+    androidTestImplementation AndroidTestDeps.roomTest
+    androidTestImplementation AndroidTestDeps.archCoreTest
+    androidTestImplementation AndroidTestDeps.espressoCore
+    androidTestImplementation AndroidTestDeps.espressoContrib
+    androidTestImplementation AndroidTestDeps.espressoIntents
+    //This is done intenionally to add idiling in the regular code
+    implementation AndroidTestDeps.espressoIdlingResource
+    androidTestImplementation AndroidTestDeps.espressoIdlingConcurrent
+    androidTestImplementation AndroidTestDeps.robolectricAnnotation
+    androidTestImplementation AndroidTestDeps.truth
+
+    // Resolve conflicts between main and test APK:
+    androidTestImplementation ApplicationDeps.androidXAnnotations
+    androidTestImplementation ApplicationDeps.androidXLegacySupport
+    androidTestImplementation ApplicationDeps.androidXRecyclerview
+    androidTestImplementation ApplicationDeps.androidXAppCompat
+    androidTestImplementation ApplicationDeps.androidXMaterial
 
     //Development dependencies
     implementation DevelopmentDeps.timber
