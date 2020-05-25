@@ -26,6 +26,7 @@ dependencies {
     //JVM Unit tests dependencies
     testImplementation JvmUnitTestDeps.junit
     testImplementation JvmUnitTestDeps.mockitoCore
+    testImplementation JvmUnitTestDeps.mockk
     testImplementation JvmUnitTestDeps.archCoreTest
     testImplementation JvmUnitTestDeps.kotlinCoroutinesAndroid
     testImplementation JvmUnitTestDeps.kotlinCoroutinesTest
