@@ -11,7 +11,7 @@ object Versions {
     val androidXAnnotations = "1.1.0"
     val androidXLegacySupport = "1.0.0"
 
-    val androidXAppCompat = "1.1.0-rc01"
+    val androidXAppCompat = "1.1.0"
     val androidXBiomertric = "1.0.0"
     val androidXRecyclerview = "1.0.0"
     val androidXNavigation = "2.2.0-alpha01"
@@ -110,7 +110,7 @@ object ApplicationDeps {
     val androidXRoomKtx = "androidx.room:room-ktx:${Versions.androidXRoom}"
     val lifecycleViewmodel =
         "androidx.lifecycle:lifecycle-viewmodel-ktx:${Versions.androidXLifecycle}"
-    val lifecycle_runtime =
+    val lifecycleRuntime =
         "androidx.lifecycle:lifecycle-runtime-ktx:${Versions.androidXLifecycle}"
     val lifecycle_livedata =
         "androidx.lifecycle:lifecycle-livedata-ktx:${Versions.androidXLifecycle}"

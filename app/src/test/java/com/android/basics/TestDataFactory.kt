@@ -1,6 +1,6 @@
 package com.android.basics
 
-import com.android.basics.features.domain.model.Todo
+import com.android.basics.features.todo.domain.model.Todo
 import java.util.*
 
 class TestDataFactory {

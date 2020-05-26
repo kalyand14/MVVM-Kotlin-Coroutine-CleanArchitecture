@@ -17,11 +17,13 @@ dependencies {
     implementation ApplicationDeps.androidXAnnotations
     implementation ApplicationDeps.androidXLegacySupport
 
+
     // Architecture Components
     implementation ApplicationDeps.androidXRoom
     kapt ApplicationDeps.androidXRoomCompiler
     implementation ApplicationDeps.androidXRoomKtx
     implementation ApplicationDeps.lifecycleViewmodel
+    implementation ApplicationDeps.lifecycleRuntime
 
     //JVM Unit tests dependencies
     testImplementation JvmUnitTestDeps.junit
