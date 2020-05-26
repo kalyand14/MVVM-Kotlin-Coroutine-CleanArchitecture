@@ -5,36 +5,80 @@ apply plugin: 'kotlin-android-extensions'
 
 dependencies {
 
-    // App dependencies
-    implementation Deps.androidx_appcompat
-    implementation Deps.androidx_core
-    implementation Deps.androidx_constraintlayout
-    implementation Deps.testandroidx_espresso_idling
+    //Application dependencies
+    implementation ApplicationDeps.kotlin
+    implementation ApplicationDeps.kotlinCoroutines
+    implementation ApplicationDeps.kotlinCoroutinesAndroid
+    implementation ApplicationDeps.androidXAppCompat
+    implementation ApplicationDeps.androidXConstraintLayout
+    implementation ApplicationDeps.androidXCard
+    implementation ApplicationDeps.androidXRecyclerview
+    implementation ApplicationDeps.androidXMaterial
+    implementation ApplicationDeps.androidXAnnotations
+    implementation ApplicationDeps.androidXLegacySupport
 
 
     // Architecture Components
-    implementation Deps.room_runtime
-    kapt Deps.room_kapt
+    implementation ApplicationDeps.androidXRoom
+    kapt ApplicationDeps.androidXRoomCompiler
+    implementation ApplicationDeps.androidXRoomKtx
+    implementation ApplicationDeps.lifecycleViewmodel
+    implementation ApplicationDeps.lifecycleRuntime
 
-    // Kotlin
-    implementation Deps.kotlin_stdlib
-    implementation Deps.coroutine_core
-    implementation Deps.coroutine_android
+    //JVM Unit tests dependencies
+    testImplementation JvmUnitTestDeps.junit
+    testImplementation JvmUnitTestDeps.mockitoCore
+    testImplementation JvmUnitTestDeps.mockk
+    testImplementation JvmUnitTestDeps.archCoreTest
+    testImplementation JvmUnitTestDeps.kotlinCoroutinesAndroid
+    testImplementation JvmUnitTestDeps.kotlinCoroutinesTest
+    testImplementation JvmUnitTestDeps.robolectric
+    testImplementation JvmUnitTestDeps.espressoCore
+    testImplementation JvmUnitTestDeps.espressoContrib
+    testImplementation JvmUnitTestDeps.espressoIntents
+    testImplementation JvmUnitTestDeps.truth
 
-    // Dependencies for local unit testing
-    testImplementation Deps.testlib_junit
+    //Android Unit tests dependencies
+    androidTestImplementation AndroidUnitTestDeps.junit
+    androidTestImplementation AndroidUnitTestDeps.mockito
+    androidTestImplementation AndroidUnitTestDeps.dexMaker
+    androidTestImplementation AndroidUnitTestDeps.kotlinCoroutinesTest
 
-    // Dependencies for Android unit testing
+    //AndroidX Test - JVM/Robolectric testing
+    testImplementation AndroidTestDeps.testCore
+    testImplementation AndroidTestDeps.testJunitExt
+    testImplementation AndroidTestDeps.testRule
+    testImplementation AndroidTestDeps.robolectric
+    //To test fragment in isolation, below dependencies are needed
+    implementation AndroidTestDeps.fragment
+    implementation AndroidTestDeps.fragmentTest
+    implementation AndroidTestDeps.testCorePlain
 
-
-    // AndroidX Test - JVM testing
-
-
-    // AndroidX Test - Instrumented testing
-    androidTestImplementation Deps.testlib_junit
-    androidTestImplementation Deps.testandroidx_espressocore
+    //AndroidX Test - Instrumented testing
+    androidTestImplementation AndroidTestDeps.testCore
+    androidTestImplementation AndroidTestDeps.testJunitExt
+    androidTestImplementation AndroidTestDeps.testRule
+    androidTestImplementation AndroidTestDeps.roomTest
+    androidTestImplementation AndroidTestDeps.archCoreTest
+    androidTestImplementation AndroidTestDeps.espressoCore
+    androidTestImplementation AndroidTestDeps.espressoContrib
+    androidTestImplementation AndroidTestDeps.espressoIntents
+    //This is done intenionally to add idiling in the regular code
+    implementation AndroidTestDeps.espressoIdlingResource
+    androidTestImplementation AndroidTestDeps.espressoIdlingConcurrent
+    androidTestImplementation AndroidTestDeps.robolectricAnnotation
+    androidTestImplementation AndroidTestDeps.truth
 
     // Resolve conflicts between main and test APK:
+    androidTestImplementation ApplicationDeps.androidXAnnotations
+    androidTestImplementation ApplicationDeps.androidXLegacySupport
+    androidTestImplementation ApplicationDeps.androidXRecyclerview
+    androidTestImplementation ApplicationDeps.androidXAppCompat
+    androidTestImplementation ApplicationDeps.androidXMaterial
 
-
+    //Development dependencies
+    implementation DevelopmentDeps.timber
+    debugImplementation DevelopmentDeps.leakCanary
+    releaseImplementation DevelopmentDeps.leakCanaryNoop
+    testImplementation DevelopmentDeps.leakCanaryNoop
 }
