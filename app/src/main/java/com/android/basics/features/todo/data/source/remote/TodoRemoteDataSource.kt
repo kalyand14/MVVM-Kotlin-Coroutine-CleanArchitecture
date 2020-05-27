@@ -46,15 +46,16 @@ object TodoRemoteDataSource : TodoDataSource {
     }
 
     override suspend fun addTodo(todo: Todo): Either<Failure, Todo> {
+        val todoId = UUID.randomUUID().toString()
         val newTodo = Todo(
-            UUID.randomUUID().toString(),
+            todoId,
             todo.userId,
             todo.name,
             todo.description,
             todo.dueDate,
             todo.isCompleted
         )
-        TODO_SERVICE_DATA[newTodo.todoId] = newTodo
+        TODO_SERVICE_DATA[todoId] = newTodo
         delay(SERVICE_LATENCY_IN_MILLIS)
         return Either.Right(newTodo)
     }

@@ -7,7 +7,7 @@ import com.android.basics.features.todo.data.source.local.dao.UserDao
 import com.android.basics.features.todo.data.source.local.entity.TodoTbl
 import com.android.basics.features.todo.data.source.local.entity.UserTbl
 
-@Database(entities = [TodoTbl::class, UserTbl::class], version = 1, exportSchema = false)
+@Database(entities = [TodoTbl::class, UserTbl::class], version = 2, exportSchema = false)
 abstract class TodoDatabase : RoomDatabase() {
     abstract fun todoDao(): TodoDao
     abstract fun userDao(): UserDao

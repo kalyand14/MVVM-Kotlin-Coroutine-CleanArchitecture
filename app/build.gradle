@@ -20,6 +20,8 @@ dependencies {
 
     // Architecture Components
     implementation ApplicationDeps.androidXRoom
+    implementation 'androidx.appcompat:appcompat:1.1.0'
+    implementation 'androidx.constraintlayout:constraintlayout:1.1.3'
     kapt ApplicationDeps.androidXRoomCompiler
     implementation ApplicationDeps.androidXRoomKtx
     implementation ApplicationDeps.lifecycleViewmodel

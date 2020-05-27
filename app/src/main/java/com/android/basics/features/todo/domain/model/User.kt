@@ -11,4 +11,6 @@ data class User(var userId: String? = null, var userName: String?, var passWord:
 
     var isValid = isUserNameValid && isPasswordValid
         private set
+
+
 }

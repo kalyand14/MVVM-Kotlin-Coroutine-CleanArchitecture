@@ -11,6 +11,7 @@ import com.android.basics.features.todo.presentation.home.HomeScreenViewModel
 import com.android.basics.features.todo.presentation.login.LoginViewModel
 import com.android.basics.features.todo.presentation.registration.RegistrationViewModel
 import com.android.basics.features.todo.presentation.splash.SplashViewModel
+import com.android.basics.features.todo.presentation.todo.add.AddTodoViewModel
 import com.android.basics.features.todo.scope.UserComponent
 
 
@@ -33,8 +34,18 @@ class ViewModelFactory(private val application: Application) :
             return provideLoginViewModel() as T
         } else if (modelClass.isAssignableFrom(RegistrationViewModel::class.java)) {
             return provideRegistrationViewModel() as T
+        } else if (modelClass.isAssignableFrom(AddTodoViewModel::class.java)) {
+            return provideAddTodoViewModel() as T
         }
         throw IllegalArgumentException("Unknown ViewModel class")
+    }
+
+    private fun provideAddTodoViewModel(): AddTodoViewModel {
+        return AddTodoViewModel(
+            todoCoordinator,
+            serviceLocator.provideTodoRepository(application.applicationContext),
+            UserSession.instance
+        )
     }
 
     private fun provideRegistrationViewModel(): RegistrationViewModel {

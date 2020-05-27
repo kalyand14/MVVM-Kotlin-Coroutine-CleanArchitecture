@@ -10,11 +10,11 @@ import com.android.basics.features.todo.data.source.local.entity.TodoTbl
 interface TodoDao {
     @Query("INSERT INTO todo (todoId, userId, name, description, dueDate, isCompleted) VALUES (:todoId, :userId, :name, :description, :dueDate, :isCompleted)")
     fun insert(
-        todoId: String,
-        userId: String,
-        name: String,
-        description: String,
-        dueDate: String,
+        todoId: String?,
+        userId: String?,
+        name: String?,
+        description: String?,
+        dueDate: String?,
         isCompleted: Boolean
     ): Long
 
@@ -28,7 +28,7 @@ interface TodoDao {
     fun getAllTodo(userId: String): List<TodoTbl>
 
     @Query("SELECT * from todo WHERE todoId =:todoId")
-    fun getTodo(todoId: String): TodoTbl?
+    fun getTodo(todoId: String?): TodoTbl?
 
     @Query("DELETE FROM todo")
     fun deleteAllTodo()

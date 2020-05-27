@@ -55,7 +55,7 @@ class HomeActivity : AppCompatActivity() {
 
         recyclerView.adapter = todoListAdapter
 
-        viewModel.onLoadTodoList("1")
+        viewModel.onLoadTodoList()
 
         floatingActionButton.setOnClickListener { viewModel.onAddTodo() }
     }

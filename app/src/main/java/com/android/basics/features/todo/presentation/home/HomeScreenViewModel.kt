@@ -28,14 +28,14 @@ class HomeScreenViewModel(
     val state: MutableLiveData<Resource<List<Todo>>> =
         MutableLiveData<Resource<List<Todo>>>()
 
-    public fun onLoadTodoList(userId: String) {
+    public fun onLoadTodoList() {
 
         welcomeMessageEvent.value = "Welcome ${session.user?.userName}"
 
         state.value = Resource.loading()
 
         viewModelScope.launch {
-            when (val result = todoRepository.getTodoList(userId)) {
+            when (val result = todoRepository.getTodoList(session.user?.userId!!)) {
                 is Either.Right -> {
                     handleTodoList(result.right)
                 }

@@ -35,7 +35,7 @@ class TodoLocalDataSource internal constructor(
         ioDispatcher,
         {
             val row = todoDao.getTodo(input.todoId)?.apply {
-                todoId = input.todoId
+                todoId = input.todoId.toString()
                 name = input.name
                 description = input.description
                 dueDate = input.dueDate
