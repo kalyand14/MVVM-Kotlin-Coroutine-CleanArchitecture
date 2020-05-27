@@ -33,7 +33,7 @@ class RegistrationViewModel(
                                 Timber.i("User registered successfully. Now authenticating user with id -> ${regResult.right.userId}");
                                 when (val result = userRepository.authenticate(it)) {
                                     is Either.Right -> {
-                                        Timber.i("User authenticated. Not navigating to home screen for user with user id -> ${regResult.right.userId}");
+                                        Timber.i("User authenticated. Now navigating to home screen for user with user id -> ${regResult.right.userId}");
                                         userSession.user = result.right
                                         state.postValue(Resource.success(result.right))
                                     }

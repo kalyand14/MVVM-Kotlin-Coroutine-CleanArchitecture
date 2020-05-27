@@ -3,6 +3,8 @@ package com.android.basics.features.todo.presentation.home
 import android.app.ProgressDialog
 import android.content.DialogInterface
 import android.os.Bundle
+import android.view.Menu
+import android.view.MenuItem
 import android.view.View
 import android.widget.TextView
 import androidx.activity.viewModels
@@ -16,10 +18,10 @@ import com.android.basics.R
 import com.android.basics.core.di.ServiceLocator
 import com.android.basics.core.extension.getViewModelFactory
 import com.android.basics.core.functional.ResourceStatus
-import com.android.basics.core.navigation.Navigator
 import com.android.basics.features.todo.domain.model.Todo
 import com.android.basics.features.todo.presentation.home.components.TodoListAdapter
 import com.google.android.material.floatingactionbutton.FloatingActionButton
+import timber.log.Timber
 
 
 class HomeActivity : AppCompatActivity() {
@@ -55,7 +57,7 @@ class HomeActivity : AppCompatActivity() {
 
         viewModel.onLoadTodoList("1")
 
-        floatingActionButton.setOnClickListener { view: View? -> { { TODO() } } }
+        floatingActionButton.setOnClickListener { viewModel.onAddTodo() }
     }
 
     private fun injectView(activity: HomeActivity) {
@@ -72,27 +74,36 @@ class HomeActivity : AppCompatActivity() {
 
     override fun onStart() {
         super.onStart()
-
+        viewModel.welcomeMessageEvent.observe(this, Observer { setWelcomeMessage(it) });
         viewModel.state.observe(this,
             Observer {
                 when (it.status) {
                     ResourceStatus.SUCCESS -> {
-                        dismissProgressDialog()
-                        showList(true)
-                        showErrorLayout(false)
-                        loadTodoList(it.data)
+                        Timber.i("Loading Todo List. This list contains ${it.data?.size} rows");
+                        if (it.data != null && it.data.size > 1) {
+                            dismissProgressDialog()
+                            showList(true)
+                            showErrorLayout(false)
+                            loadTodoList(it.data)
+                        } else {
+                            showError()
+                        }
                     }
                     ResourceStatus.ERROR -> {
-                        dismissProgressDialog()
-                        showList(false)
-                        showErrorLayout(true)
+                        showError()
                     }
                     ResourceStatus.LOADING -> showProgressDialog()
                 }
             }
         )
+        viewModel.loggedOutEvent.observe(this, Observer { showLogoutConfirmationDialog() })
     }
 
+    private fun showError() {
+        dismissProgressDialog()
+        showList(false)
+        showErrorLayout(true)
+    }
 
     override fun onPause() {
         super.onPause()
@@ -139,7 +150,7 @@ class HomeActivity : AppCompatActivity() {
                 "Yes"
             ) { dialog: DialogInterface, id: Int ->
                 dialog.dismiss()
-                //viewModel.logout()
+                viewModel.logout()
             }
             .setNegativeButton(
                 "No"
@@ -150,4 +161,20 @@ class HomeActivity : AppCompatActivity() {
         alert.show()
     }
 
+    override fun onCreateOptionsMenu(menu: Menu): Boolean {
+        val inflater = menuInflater
+        inflater.inflate(R.menu.menu, menu)
+        return true
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        // Handle item selection
+        return when (item.getItemId()) {
+            R.id.menu_action_logout -> {
+                viewModel.onLogout()
+                true
+            }
+            else -> super.onOptionsItemSelected(item)
+        }
+    }
 }

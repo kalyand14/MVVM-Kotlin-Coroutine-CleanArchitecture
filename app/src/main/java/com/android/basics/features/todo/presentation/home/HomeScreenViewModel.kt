@@ -7,11 +7,11 @@ import com.android.basics.core.SingleLiveEvent
 import com.android.basics.core.exception.Failure
 import com.android.basics.core.functional.Either
 import com.android.basics.core.functional.Resource
+import com.android.basics.features.todo.domain.model.Todo
+import com.android.basics.features.todo.domain.repository.TodoRepository
 import com.android.basics.features.todo.presentation.components.TodoCoordinator
 import com.android.basics.features.todo.presentation.components.UserSession
 import com.android.basics.features.todo.scope.UserComponent
-import com.android.basics.features.todo.domain.model.Todo
-import com.android.basics.features.todo.domain.repository.TodoRepository
 import kotlinx.coroutines.launch
 
 
@@ -22,8 +22,8 @@ class HomeScreenViewModel(
     private val userComponent: UserComponent
 ) : ViewModel() {
 
-    private val loggedOutEvent = SingleLiveEvent<Void>()
-    private val welcomeMessageEvent = SingleLiveEvent<String>()
+    val loggedOutEvent = SingleLiveEvent<Void>()
+    val welcomeMessageEvent = SingleLiveEvent<String>()
 
     val state: MutableLiveData<Resource<List<Todo>>> =
         MutableLiveData<Resource<List<Todo>>>()
