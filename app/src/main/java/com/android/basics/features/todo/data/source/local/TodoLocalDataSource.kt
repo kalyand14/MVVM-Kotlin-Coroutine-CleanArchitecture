@@ -48,7 +48,11 @@ class TodoLocalDataSource internal constructor(
     )
 
 
-    override suspend fun addTodo(input: Todo): Either<Failure, Boolean> = query(
+    /***
+     *  1) insert newtodo into database
+     *  2) if it success then return the inserted record
+     * */
+    override suspend fun addTodo(input: Todo): Either<Failure, Todo> = query(
         ioDispatcher,
         {
             val result = todoDao.insert(
@@ -61,7 +65,7 @@ class TodoLocalDataSource internal constructor(
             )
             result
         },
-        { true },
+        { input },
         { result -> (result?.toInt() != 1) }
     )
 

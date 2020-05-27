@@ -11,6 +11,7 @@ import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
 import com.android.basics.R
+import com.android.basics.core.di.ServiceLocator
 import com.android.basics.core.exception.Failure
 import com.android.basics.core.extension.getViewModelFactory
 import com.android.basics.core.functional.ResourceStatus
@@ -31,10 +32,11 @@ class LoginActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_login)
+
         initViews()
     }
 
-    private fun initViews() {
+   private fun initViews() {
         btnLogin = findViewById(R.id.btn_add_todo)
         btnRegister = findViewById(R.id.btn_signup)
         edtUserName = findViewById(R.id.edt_todo_name)
@@ -62,16 +64,10 @@ class LoginActivity : AppCompatActivity() {
     }
 
 
-    override fun onPause() {
-        super.onPause()
-        dismissProgressDialog()
-    }
-
     private fun showProgressDialog() {
         progressDialog.setMessage("Logging in")
         progressDialog.show()
     }
-
 
     private fun dismissProgressDialog() {
         progressDialog.dismiss()
@@ -96,6 +92,9 @@ class LoginActivity : AppCompatActivity() {
 
     override fun onStart() {
         super.onStart()
+
+        ServiceLocator.provideNavigator().attachView(this, lifecycle)
+
         viewModel.state.observe(this,
             Observer {
                 when (it.status) {
@@ -111,5 +110,11 @@ class LoginActivity : AppCompatActivity() {
                 }
             }
         )
+    }
+
+    override fun onPause() {
+        super.onPause()
+        dismissProgressDialog()
+        ServiceLocator.provideNavigator().onViewDestroyed()
     }
 }
