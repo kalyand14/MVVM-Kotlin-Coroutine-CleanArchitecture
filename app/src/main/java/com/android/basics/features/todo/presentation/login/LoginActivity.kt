@@ -15,7 +15,7 @@ import com.android.basics.core.di.ServiceLocator
 import com.android.basics.core.exception.Failure
 import com.android.basics.core.extension.getViewModelFactory
 import com.android.basics.core.functional.ResourceStatus
-import com.android.basics.features.todo.scope.UserComponent
+import com.android.basics.features.todo.scope.UserScope
 
 
 class LoginActivity : AppCompatActivity() {
@@ -54,7 +54,7 @@ class LoginActivity : AppCompatActivity() {
         }
         btnRegister.run { setOnClickListener(View.OnClickListener { viewModel.onRegisterClick() }) }
 
-        UserComponent.instance.end()
+        UserScope.end()
     }
 
     private fun intProgressDialog() {

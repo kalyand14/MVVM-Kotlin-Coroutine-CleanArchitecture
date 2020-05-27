@@ -10,16 +10,14 @@ import com.android.basics.core.functional.Resource
 import com.android.basics.features.todo.domain.model.Todo
 import com.android.basics.features.todo.domain.repository.TodoRepository
 import com.android.basics.features.todo.presentation.components.TodoCoordinator
-import com.android.basics.features.todo.presentation.components.UserSession
-import com.android.basics.features.todo.scope.UserComponent
+import com.android.basics.features.todo.scope.UserScope
 import kotlinx.coroutines.launch
 
 
 class HomeScreenViewModel(
     private val todoRepository: TodoRepository,
     private val coordinator: TodoCoordinator,
-    private val session: UserSession,
-    private val userComponent: UserComponent
+    private val userScope: UserScope
 ) : ViewModel() {
 
     val loggedOutEvent = SingleLiveEvent<Void>()
@@ -30,12 +28,12 @@ class HomeScreenViewModel(
 
     public fun onLoadTodoList() {
 
-        welcomeMessageEvent.value = "Welcome ${session.user?.userName}"
+        welcomeMessageEvent.value = "Welcome ${userScope.user?.userName}"
 
         state.value = Resource.loading()
 
         viewModelScope.launch {
-            when (val result = todoRepository.getTodoList(session.user?.userId!!)) {
+            when (val result = todoRepository.getTodoList(userScope.user?.userId!!)) {
                 is Either.Right -> {
                     handleTodoList(result.right)
                 }
@@ -59,7 +57,7 @@ class HomeScreenViewModel(
     }
 
     fun logout() {
-        userComponent.end()
+        userScope.end()
         coordinator.goToLoginScreen()
     }
 

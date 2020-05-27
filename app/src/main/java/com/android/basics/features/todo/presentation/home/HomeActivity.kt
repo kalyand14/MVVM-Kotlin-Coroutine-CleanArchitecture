@@ -55,8 +55,6 @@ class HomeActivity : AppCompatActivity() {
 
         recyclerView.adapter = todoListAdapter
 
-        viewModel.onLoadTodoList()
-
         floatingActionButton.setOnClickListener { viewModel.onAddTodo() }
     }
 
@@ -67,20 +65,21 @@ class HomeActivity : AppCompatActivity() {
     }
 
     private fun injectObject(activity: HomeActivity) {
-        ServiceLocator.provideNavigator().attachView(this, lifecycle)
         activity.todoListAdapter = ServiceLocator.provideTodoListAdapter()
     }
 
 
     override fun onStart() {
         super.onStart()
+        ServiceLocator.provideNavigator().attachView(this, lifecycle)
+
         viewModel.welcomeMessageEvent.observe(this, Observer { setWelcomeMessage(it) });
         viewModel.state.observe(this,
             Observer {
                 when (it.status) {
                     ResourceStatus.SUCCESS -> {
                         Timber.i("Loading Todo List. This list contains ${it.data?.size} rows");
-                        if (it.data != null && it.data.size > 1) {
+                        if (it.data != null && it.data.isNotEmpty()) {
                             dismissProgressDialog()
                             showList(true)
                             showErrorLayout(false)
@@ -97,6 +96,8 @@ class HomeActivity : AppCompatActivity() {
             }
         )
         viewModel.loggedOutEvent.observe(this, Observer { showLogoutConfirmationDialog() })
+
+        viewModel.onLoadTodoList()
     }
 
     private fun showError() {

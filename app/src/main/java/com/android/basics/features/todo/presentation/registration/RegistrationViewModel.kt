@@ -9,13 +9,13 @@ import com.android.basics.core.functional.Resource
 import com.android.basics.features.todo.domain.model.User
 import com.android.basics.features.todo.domain.repository.UserRepository
 import com.android.basics.features.todo.presentation.components.TodoCoordinator
-import com.android.basics.features.todo.presentation.components.UserSession
+import com.android.basics.features.todo.scope.UserScope
 import kotlinx.coroutines.launch
 import timber.log.Timber
 
 class RegistrationViewModel(
     private val todoCoordinator: TodoCoordinator,
-    private val userSession: UserSession,
+    private val userScope: UserScope,
     private val userRepository: UserRepository
 ) : ViewModel() {
 
@@ -34,7 +34,7 @@ class RegistrationViewModel(
                                 when (val result = userRepository.authenticate(it)) {
                                     is Either.Right -> {
                                         Timber.i("User authenticated. Now navigating to home screen for user with user id -> ${regResult.right.userId}");
-                                        userSession.user = result.right
+                                        userScope.user = result.right
                                         state.postValue(Resource.success(result.right))
                                     }
                                     is Either.Left -> state.postValue(Resource.error(result.left))

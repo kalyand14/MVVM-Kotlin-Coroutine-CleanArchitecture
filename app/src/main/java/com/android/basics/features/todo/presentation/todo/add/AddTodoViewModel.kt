@@ -10,14 +10,14 @@ import com.android.basics.core.functional.Resource
 import com.android.basics.features.todo.domain.model.Todo
 import com.android.basics.features.todo.domain.repository.TodoRepository
 import com.android.basics.features.todo.presentation.components.TodoCoordinator
-import com.android.basics.features.todo.presentation.components.UserSession
+import com.android.basics.features.todo.scope.UserScope
 import kotlinx.coroutines.launch
 
 
 class AddTodoViewModel(
     private val todoCoordinator: TodoCoordinator,
     private val todoRepository: TodoRepository,
-    private val userSession: UserSession
+    private val userScope: UserScope
 ) :
     ViewModel() {
 
@@ -30,7 +30,7 @@ class AddTodoViewModel(
         date: String
     ) {
         Todo(
-            userId = userSession.user?.userId!!,
+            userId = userScope.user?.userId!!,
             name = name,
             description = desc,
             dueDate = date

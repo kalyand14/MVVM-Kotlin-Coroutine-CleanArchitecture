@@ -11,21 +11,22 @@ import com.android.basics.features.todo.presentation.splash.SplashNavigator
 import com.android.basics.features.todo.presentation.todo.add.AddTodoActivity
 import com.android.basics.features.todo.presentation.todo.add.AddTodoNavigator
 import com.android.basics.features.todo.presentation.todo.edit.EditTodoActivity
+import com.android.basics.features.todo.presentation.todo.edit.EditTodoNavigator
 
 
 class TodoCoordinator(private val navigator: Navigator) : HomeScreenNavigator, SplashNavigator,
-    LoginNavigator, RegistrationNavigator, AddTodoNavigator {
+    LoginNavigator, RegistrationNavigator, AddTodoNavigator, EditTodoNavigator {
 
     override fun goToEditTodoScreen() {
         val intent = navigator.createIntent(EditTodoActivity::class.java)
         navigator.launchActivity(intent)
-        navigator.finishActivity()
+
     }
 
     override fun gotoAddTodoScreen() {
         val intent = navigator.createIntent(AddTodoActivity::class.java)
         navigator.launchActivity(intent)
-        navigator.finishActivity()
+
     }
 
     override fun goToLoginScreen() {

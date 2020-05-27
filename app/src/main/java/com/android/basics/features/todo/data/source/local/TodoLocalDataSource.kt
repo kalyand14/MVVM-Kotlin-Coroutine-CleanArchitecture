@@ -66,7 +66,7 @@ class TodoLocalDataSource internal constructor(
             result
         },
         { input },
-        { result -> (result?.toInt() != 1) }
+        { result -> (result?.toInt()!! >= 1) }
     )
 
 
@@ -74,7 +74,7 @@ class TodoLocalDataSource internal constructor(
         ioDispatcher,
         { todoDao.delete(todoId) },
         { true },
-        { result -> (result != 1) }
+        { result -> (result == 1) }
     )
 
     override suspend fun deleteAllTodo() = withContext(ioDispatcher) {
