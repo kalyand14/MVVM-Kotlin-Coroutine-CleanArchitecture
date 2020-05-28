@@ -6,7 +6,7 @@
 
 <ul>
 <li>Presentation (Activity/Fragment and ViewModel)</li>
-<li>Domain (Interactor/Usecases, Repository Interface and Model classes)</li>
+<li>Domain (Repository Interface and Model classes)</li>
 <li>Data (Local/remote datastore and Respository implementation)</li>
 </ul>
 
