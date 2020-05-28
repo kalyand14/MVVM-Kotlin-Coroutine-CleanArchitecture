@@ -1,6 +1,9 @@
 package com.android.basics
 
+import com.android.basics.core.exception.Failure
 import com.android.basics.features.todo.domain.model.Todo
+import com.android.basics.features.todo.domain.model.User
+import com.android.basics.features.todo.scope.UserScope
 import java.util.*
 
 class TestDataFactory {
@@ -8,8 +11,6 @@ class TestDataFactory {
     companion object Factory {
 
         const val NOT_FOUND = "not found"
-
-        fun getUserId() = "1"
 
         fun getTodo(
             todoId: String = UUID.randomUUID().toString(),
@@ -26,5 +27,20 @@ class TestDataFactory {
             dueDate = dueDate,
             isCompleted = isCompleted
         )
+
+        fun getUserId() = getUserScope().user?.userId!!
+
+        fun getUserScope(): UserScope {
+            UserScope.user = User("1", "kalyan", "password")
+            return UserScope
+        }
+
+        fun getTodoList() = mutableListOf(
+            getTodo(todoId = "1"),
+            getTodo(todoId = "2"),
+            getTodo(todoId = "3")
+        )
+
+        fun getDataError() = Failure.DataError(TestDataFactory.NOT_FOUND)
     }
 }
