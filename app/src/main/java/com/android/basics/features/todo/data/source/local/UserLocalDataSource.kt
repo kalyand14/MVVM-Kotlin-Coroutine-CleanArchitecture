@@ -8,6 +8,7 @@ import com.android.basics.features.todo.data.source.local.dao.UserDao
 import com.android.basics.features.todo.domain.model.User
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
+import timber.log.Timber
 
 class UserLocalDataSource(
     private val userDao: UserDao,
@@ -17,15 +18,22 @@ class UserLocalDataSource(
         ioDispatcher,
         {
             userDao.insert(input.userId, input.userName, input.passWord)
-            userDao.getUser(input.userName, input.passWord)
+            Timber.d("A new record inserted successfully into User table");
+            val row = userDao.getUser(input.userName, input.passWord)
+            Timber.d("Selected user from User table for user - ${input.userName}");
+            row
         },
         { row -> row?.toUser()!! },
         { result -> (result != null) }
     )
 
-    override suspend fun authenticate(user: User): Either<Failure, User> = query(
+    override suspend fun authenticate(input: User): Either<Failure, User> = query(
         ioDispatcher,
-        { userDao.getUser(user.userName, user.passWord) },
+        {
+            val row = userDao.getUser(input.userName, input.passWord)
+            Timber.d("Selected user from User table for user - ${input.userName}");
+            row
+        },
         { row -> row?.toUser()!! },
         { result -> (result != null) }
     )

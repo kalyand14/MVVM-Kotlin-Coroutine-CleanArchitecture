@@ -35,7 +35,7 @@ class TodoLocalDataSource internal constructor(
         ioDispatcher,
         {
             val row = todoDao.getTodo(input.todoId)?.apply {
-                todoId = input.todoId
+                todoId = input.todoId.toString()
                 name = input.name
                 description = input.description
                 dueDate = input.dueDate
@@ -48,7 +48,11 @@ class TodoLocalDataSource internal constructor(
     )
 
 
-    override suspend fun addTodo(input: Todo): Either<Failure, Boolean> = query(
+    /***
+     *  1) insert newtodo into database
+     *  2) if it success then return the inserted record
+     * */
+    override suspend fun addTodo(input: Todo): Either<Failure, Todo> = query(
         ioDispatcher,
         {
             val result = todoDao.insert(
@@ -61,8 +65,8 @@ class TodoLocalDataSource internal constructor(
             )
             result
         },
-        { true },
-        { result -> (result?.toInt() != 1) }
+        { input },
+        { result -> (result?.toInt()!! >= 1) }
     )
 
 
@@ -70,7 +74,7 @@ class TodoLocalDataSource internal constructor(
         ioDispatcher,
         { todoDao.delete(todoId) },
         { true },
-        { result -> (result != 1) }
+        { result -> (result == 1) }
     )
 
     override suspend fun deleteAllTodo() = withContext(ioDispatcher) {

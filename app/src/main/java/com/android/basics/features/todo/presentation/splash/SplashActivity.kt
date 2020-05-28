@@ -15,11 +15,16 @@ class SplashActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_splash)
-        inject()
         Handler().postDelayed({ viewModel.navigate() }, 1000)
     }
 
-    private fun inject() {
+    override fun onStart() {
+        super.onStart()
         ServiceLocator.provideNavigator().attachView(this, lifecycle)
+    }
+
+    override fun onPause() {
+        super.onPause()
+        ServiceLocator.provideNavigator().onViewDestroyed()
     }
 }

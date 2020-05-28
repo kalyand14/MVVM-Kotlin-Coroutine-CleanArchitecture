@@ -9,13 +9,14 @@ import com.android.basics.core.functional.Resource
 import com.android.basics.features.todo.domain.model.User
 import com.android.basics.features.todo.domain.repository.UserRepository
 import com.android.basics.features.todo.presentation.components.TodoCoordinator
-import com.android.basics.features.todo.presentation.components.UserSession
+import com.android.basics.features.todo.scope.UserScope
 import kotlinx.coroutines.launch
+import timber.log.Timber
 
 
 class LoginViewModel(
     private val todoCoordinator: TodoCoordinator,
-    private val userSession: UserSession,
+    private val userScope: UserScope,
     private val userRepository: UserRepository
 ) : ViewModel() {
 
@@ -30,7 +31,8 @@ class LoginViewModel(
                     viewModelScope.launch {
                         when (val result = userRepository.authenticate(it)) {
                             is Either.Right -> {
-                                userSession.user = result.right
+                                Timber.i("User authenticated. Now navigating to home screen for user with user id -> ${result.right.userId}");
+                                userScope.user = result.right
                                 state.postValue(Resource.success(result.right))
                                 todoCoordinator.goToHomeScreen()
                             }

@@ -19,9 +19,8 @@ import com.android.basics.features.todo.data.source.remote.UserRemoteDataSource
 import com.android.basics.features.todo.domain.repository.TodoRepository
 import com.android.basics.features.todo.domain.repository.UserRepository
 import com.android.basics.features.todo.presentation.components.TodoCoordinator
-import com.android.basics.features.todo.presentation.components.TodoSession
 import com.android.basics.features.todo.presentation.home.components.TodoListAdapter
-import com.android.basics.features.todo.scope.TodoComponent
+import com.android.basics.features.todo.scope.TodoScope
 import kotlinx.coroutines.runBlocking
 
 object ServiceLocator {
@@ -39,6 +38,9 @@ object ServiceLocator {
     @Volatile
     var userRepository: UserRepository? = null
         @VisibleForTesting set
+
+
+
 
     fun provideTodoRepository(context: Context): TodoRepository {
         synchronized(this) {
@@ -149,8 +151,7 @@ object ServiceLocator {
         return TodoListAdapter(
             ArrayList(),
             provideTodoCoordinator(),
-            TodoSession.instance,
-            TodoComponent.instance
+            TodoScope
         )
     }
 

@@ -19,8 +19,7 @@ class Navigator(private val intentFactory: IntentFactory) : BaseNavigator, Lifec
         viewLifecycle.addObserver(this)
     }
 
-    @OnLifecycleEvent(Lifecycle.Event.ON_DESTROY)
-    private fun onViewDestroyed() {
+    fun onViewDestroyed() {
         contextWeakRef?.clear()
         contextWeakRef = null
         viewLifecycle = null

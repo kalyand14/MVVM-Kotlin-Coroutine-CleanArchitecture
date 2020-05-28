@@ -10,9 +10,9 @@ import java.util.*
 data class TodoTbl @JvmOverloads constructor(
     @PrimaryKey @ColumnInfo(name = "todoId") var todoId: String = UUID.randomUUID().toString(),
     @ColumnInfo(name = "userId") var userId: String = "",
-    @ColumnInfo(name = "name") var name: String = "",
-    @ColumnInfo(name = "description") var description: String = "",
-    @ColumnInfo(name = "dueDate") var dueDate: String = "",
+    @ColumnInfo(name = "name") var name: String? = "",
+    @ColumnInfo(name = "description") var description: String? = "",
+    @ColumnInfo(name = "dueDate") var dueDate: String? = "",
     @ColumnInfo(name = "isCompleted") var isCompleted: Boolean = false
 ) {
     fun toTodo() = Todo(

@@ -8,17 +8,25 @@ import com.android.basics.features.todo.presentation.login.LoginNavigator
 import com.android.basics.features.todo.presentation.registration.RegistrationActivity
 import com.android.basics.features.todo.presentation.registration.RegistrationNavigator
 import com.android.basics.features.todo.presentation.splash.SplashNavigator
+import com.android.basics.features.todo.presentation.todo.add.AddTodoActivity
+import com.android.basics.features.todo.presentation.todo.add.AddTodoNavigator
+import com.android.basics.features.todo.presentation.todo.edit.EditTodoActivity
+import com.android.basics.features.todo.presentation.todo.edit.EditTodoNavigator
 
 
 class TodoCoordinator(private val navigator: Navigator) : HomeScreenNavigator, SplashNavigator,
-    LoginNavigator, RegistrationNavigator {
+    LoginNavigator, RegistrationNavigator, AddTodoNavigator, EditTodoNavigator {
 
     override fun goToEditTodoScreen() {
-        TODO("Not yet implemented")
+        val intent = navigator.createIntent(EditTodoActivity::class.java)
+        navigator.launchActivity(intent)
+
     }
 
     override fun gotoAddTodoScreen() {
-        TODO("Not yet implemented")
+        val intent = navigator.createIntent(AddTodoActivity::class.java)
+        navigator.launchActivity(intent)
+
     }
 
     override fun goToLoginScreen() {

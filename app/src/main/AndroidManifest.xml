@@ -10,11 +10,14 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
+        <activity android:name=".features.todo.presentation.todo.edit.EditTodoActivity"></activity>
+        <activity android:name=".features.todo.presentation.todo.add.AddTodoActivity" />
         <activity android:name=".features.todo.presentation.registration.RegistrationActivity" />
         <activity android:name=".features.todo.presentation.login.LoginActivity" />
         <activity android:name=".features.todo.presentation.splash.SplashActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
