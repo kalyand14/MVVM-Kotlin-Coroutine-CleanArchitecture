@@ -3,6 +3,7 @@ package com.android.basics
 import com.android.basics.core.exception.Failure
 import com.android.basics.features.todo.domain.model.Todo
 import com.android.basics.features.todo.domain.model.User
+import com.android.basics.features.todo.scope.TodoScope
 import com.android.basics.features.todo.scope.UserScope
 import java.util.*
 
@@ -43,6 +44,17 @@ class TestDataFactory {
         fun getUserScope(): UserScope {
             UserScope.user = User("1", "kalyan", "password")
             return UserScope
+        }
+
+        fun getTodoScope(): TodoScope {
+            TodoScope.todo = Todo(
+                todoId = "1",
+                userId = getUserId(),
+                name = "New project",
+                description = "complete this project",
+                dueDate = "28/05/2018"
+            )
+            return TodoScope
         }
 
         fun getTodoList() = mutableListOf(

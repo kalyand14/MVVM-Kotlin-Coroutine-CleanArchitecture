@@ -142,5 +142,6 @@ class HomeScreenViewModelTest {
         coVerify { todoRepository.getTodoList(TestDataFactory.getUserId()) }
 
         assertThat(viewModel.state.value?.status).isEqualTo(ResourceStatus.ERROR)
+        assertThat(viewModel.state.value?.failure).isEqualTo(TestDataFactory.getDataError())
     }
 }

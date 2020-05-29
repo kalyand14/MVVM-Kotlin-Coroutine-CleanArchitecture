@@ -1,4 +1,4 @@
-package com.android.basics.features.todo.presentation.todo.add
+package com.android.basics.features.todo.presentation.todo.edit
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import com.android.basics.TestDataFactory
@@ -6,7 +6,7 @@ import com.android.basics.core.functional.Either
 import com.android.basics.core.functional.ResourceStatus
 import com.android.basics.features.todo.domain.repository.TodoRepository
 import com.android.basics.features.todo.presentation.components.TodoCoordinator
-import com.android.basics.features.todo.scope.UserScope
+import com.android.basics.features.todo.scope.TodoScope
 import com.google.common.truth.Truth
 import io.mockk.coEvery
 import io.mockk.coVerify
@@ -24,28 +24,27 @@ import org.junit.Rule
 import org.junit.Test
 import org.junit.rules.TestRule
 
-
 @ExperimentalCoroutinesApi
-class AddTodoViewModelTest {
+class EditTodoViewModelTest {
 
     @get:Rule
     val testInstantTaskExecutorRule: TestRule = InstantTaskExecutorRule()
 
     private val dispatcher = TestCoroutineDispatcher()
 
-    private lateinit var viewModel: AddTodoViewModel
+    private lateinit var viewModel: EditTodoViewModel
 
     private val todoRepository: TodoRepository = mockk()
 
     private val todoCoordinator: TodoCoordinator = mockk(relaxed = true)
 
-    private val userScope: UserScope = TestDataFactory.getUserScope()
+    private val todoScope: TodoScope = TestDataFactory.getTodoScope()
 
     @Before
     fun setUp() {
         Dispatchers.setMain(dispatcher)
         viewModel =
-            AddTodoViewModel(todoCoordinator, todoRepository, userScope)
+            EditTodoViewModel(todoCoordinator, todoRepository, todoScope)
     }
 
     @After
@@ -84,16 +83,16 @@ class AddTodoViewModelTest {
             "",
             ""
         )
-        Truth.assertThat(viewModel.state.value?.status).isEqualTo(ResourceStatus.ERROR)
-        Truth.assertThat(viewModel.state.value?.failure)
+        Truth.assertThat(viewModel.editTodoState.value?.status).isEqualTo(ResourceStatus.ERROR)
+        Truth.assertThat(viewModel.editTodoState.value?.failure)
             .isEqualTo(TestDataFactory.getTodoValidationError())
     }
 
     @Test
-    fun givenAddNewTodo_shouldReturnSuccess() = dispatcher.runBlockingTest {
+    fun givenEditTodo_shouldReturnSuccess() = dispatcher.runBlockingTest {
 
-        coEvery { todoRepository.addTodo(TestDataFactory.getNewTodo()) } returns Either.Right(
-            TestDataFactory.getNewTodo()
+        coEvery { todoRepository.editTodo(TestDataFactory.getTodoScope().todo!!) } returns Either.Right(
+            true
         )
 
         dispatcher.pauseDispatcher()
@@ -101,19 +100,19 @@ class AddTodoViewModelTest {
         TestDataFactory.getNewTodo()
             .let { viewModel.onSubmit(it.name!!, it.description!!, it.dueDate!!) }
 
-        Truth.assertThat(viewModel.state.value?.status).isEqualTo(ResourceStatus.LOADING)
+        Truth.assertThat(viewModel.editTodoState.value?.status).isEqualTo(ResourceStatus.LOADING)
 
         dispatcher.resumeDispatcher()
 
-        coVerify { todoRepository.addTodo(TestDataFactory.getNewTodo()) }
+        coVerify { todoRepository.editTodo(TestDataFactory.getTodoScope().todo!!) }
 
-        Truth.assertThat(viewModel.state.value?.status).isEqualTo(ResourceStatus.SUCCESS)
+        Truth.assertThat(viewModel.editTodoState.value?.status).isEqualTo(ResourceStatus.SUCCESS)
     }
 
     @Test
-    fun givenAddNewTodo_shouldReturnFailure() = dispatcher.runBlockingTest {
+    fun givenEditTodo_shouldReturnFailure() = dispatcher.runBlockingTest {
         // prepare mock interactions
-        coEvery { todoRepository.addTodo(TestDataFactory.getNewTodo()) } returns Either.Left(
+        coEvery { todoRepository.editTodo(TestDataFactory.getTodoScope().todo!!) } returns Either.Left(
             TestDataFactory.getDataError()
         )
         // suspend the function
@@ -124,17 +123,17 @@ class AddTodoViewModelTest {
             .let { viewModel.onSubmit(it.name!!, it.description!!, it.dueDate!!) }
 
         //verify interactions and state if necessary
-        Truth.assertThat(viewModel.state.value?.status).isEqualTo(ResourceStatus.LOADING)
+        Truth.assertThat(viewModel.editTodoState.value?.status).isEqualTo(ResourceStatus.LOADING)
 
         // resume the function
         dispatcher.resumeDispatcher()
 
         //verify interactions and state if necessary
-        coVerify { todoRepository.addTodo(TestDataFactory.getNewTodo()) }
+        coVerify { todoRepository.editTodo(TestDataFactory.getTodoScope().todo!!) }
 
-        Truth.assertThat(viewModel.state.value?.status).isEqualTo(ResourceStatus.ERROR)
+        Truth.assertThat(viewModel.editTodoState.value?.status).isEqualTo(ResourceStatus.ERROR)
 
-        Truth.assertThat(viewModel.state.value?.failure)
+        Truth.assertThat(viewModel.editTodoState.value?.failure)
             .isEqualTo(TestDataFactory.getDataError())
     }
 }
