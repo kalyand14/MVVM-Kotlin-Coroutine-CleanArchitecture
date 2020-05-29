@@ -6,10 +6,12 @@ import com.android.basics.core.functional.Either
 import com.android.basics.core.functional.ResourceStatus
 import com.android.basics.features.todo.domain.repository.TodoRepository
 import com.android.basics.features.todo.presentation.components.TodoCoordinator
+import com.android.basics.features.todo.scope.UserScope
 import com.google.common.truth.Truth.assertThat
 import io.mockk.coEvery
 import io.mockk.coVerify
 import io.mockk.mockk
+import io.mockk.verify
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.TestCoroutineDispatcher
@@ -26,6 +28,10 @@ import org.junit.rules.TestRule
 @ExperimentalCoroutinesApi
 class HomeScreenViewModelTest {
 
+    companion object {
+        private var WELCOME_MESSAGE = "Welcome ${TestDataFactory.getUserScope().user?.userName!!}"
+    }
+
     @get:Rule
     val testInstantTaskExecutorRule: TestRule = InstantTaskExecutorRule()
 
@@ -35,18 +41,64 @@ class HomeScreenViewModelTest {
 
     private val todoRepository: TodoRepository = mockk()
 
-    private val todoCoordinator: TodoCoordinator = mockk()
+    private val todoCoordinator: TodoCoordinator = mockk(relaxed = true)
+
+    private val userScope: UserScope = TestDataFactory.getUserScope()
 
     @Before
     fun setUp() {
         Dispatchers.setMain(dispatcher)
         viewModel =
-            HomeScreenViewModel(todoRepository, todoCoordinator, TestDataFactory.getUserScope())
+            HomeScreenViewModel(todoRepository, todoCoordinator, userScope)
     }
 
     @After
     fun cleanup() {
         Dispatchers.resetMain()
+    }
+
+    @Test
+    fun testLogOut_event() {
+
+        // Act
+        viewModel.onLogout()
+
+        // Assert
+        assertThat(viewModel.loggedOutEvent.value).isNull()
+    }
+
+    @Test
+    fun testLogOut_navigation() {
+
+        // Act
+        viewModel.logout()
+
+        // Assert
+        verify { todoCoordinator.goToLoginScreen() }
+        assertThat(userScope.user).isNull()
+    }
+
+    @Test
+    fun testAddTodo_navigation() {
+        // Act
+        viewModel.onAddTodo()
+
+        // Assert
+        verify { todoCoordinator.gotoAddTodoScreen() }
+    }
+
+    @Test
+    fun shouldSetWelcomeMessage() {
+        // Assume
+        coEvery { todoRepository.getTodoList(TestDataFactory.getUserId()) } returns Either.Right(
+            TestDataFactory.getTodoList()
+        )
+
+        // Act
+        viewModel.onLoadTodoList()
+
+        // Assert
+        assertThat(viewModel.welcomeMessageEvent.value).isEqualTo(WELCOME_MESSAGE)
     }
 
 

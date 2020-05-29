@@ -28,6 +28,8 @@ class TestDataFactory {
             isCompleted = isCompleted
         )
 
+        fun getNewUser() = User(null, "kalyan", "password")
+
         fun getUserId() = getUserScope().user?.userId!!
 
         fun getUserScope(): UserScope {
@@ -42,5 +44,7 @@ class TestDataFactory {
         )
 
         fun getDataError() = Failure.DataError(TestDataFactory.NOT_FOUND)
+
+        fun getValidationError() = Failure.ValidationDataError("Incorrect username and password")
     }
 }
