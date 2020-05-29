@@ -19,7 +19,7 @@ class TodoLocalDataSource internal constructor(
         ioDispatcher,
         { todoDao.getAllTodo(userId) },
         { it.map { row -> row.toTodo() } },
-        { result -> (result != null) }
+        { result -> (result != null && (result as List<*>).isNotEmpty()) }
     )
 
 
