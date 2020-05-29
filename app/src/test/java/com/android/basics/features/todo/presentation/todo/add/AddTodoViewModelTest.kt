@@ -1,4 +1,4 @@
-package com.android.basics.features.todo.presentation.home
+package com.android.basics.features.todo.presentation.todo.add
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import com.android.basics.TestDataFactory
@@ -7,7 +7,7 @@ import com.android.basics.core.functional.ResourceStatus
 import com.android.basics.features.todo.domain.repository.TodoRepository
 import com.android.basics.features.todo.presentation.components.TodoCoordinator
 import com.android.basics.features.todo.scope.UserScope
-import com.google.common.truth.Truth.assertThat
+import com.google.common.truth.Truth
 import io.mockk.coEvery
 import io.mockk.coVerify
 import io.mockk.mockk
@@ -26,18 +26,14 @@ import org.junit.rules.TestRule
 
 
 @ExperimentalCoroutinesApi
-class HomeScreenViewModelTest {
-
-    companion object {
-        private var WELCOME_MESSAGE = "Welcome ${TestDataFactory.getUserScope().user?.userName!!}"
-    }
+class AddTodoViewModelTest {
 
     @get:Rule
     val testInstantTaskExecutorRule: TestRule = InstantTaskExecutorRule()
 
     private val dispatcher = TestCoroutineDispatcher()
 
-    private lateinit var viewModel: HomeScreenViewModel
+    private lateinit var viewModel: AddTodoViewModel
 
     private val todoRepository: TodoRepository = mockk()
 
@@ -49,7 +45,7 @@ class HomeScreenViewModelTest {
     fun setUp() {
         Dispatchers.setMain(dispatcher)
         viewModel =
-            HomeScreenViewModel(todoRepository, todoCoordinator, userScope)
+            AddTodoViewModel(todoCoordinator, todoRepository, userScope)
     }
 
     @After
@@ -58,89 +54,84 @@ class HomeScreenViewModelTest {
     }
 
     @Test
-    fun testLogOut_event() {
+    fun testHomeScreen_navigation() {
         // Act
-        viewModel.onLogout()
+        viewModel.navigate()
         // Assert
-        assertThat(viewModel.loggedOutEvent.value).isNull()
+        verify { todoCoordinator.goToHomeScreen() }
     }
 
     @Test
-    fun testLogOut_navigation() {
-
+    fun testCancel_navigation() {
         // Act
-        viewModel.logout()
-
+        viewModel.onCancel()
         // Assert
-        verify { todoCoordinator.goToLoginScreen() }
-        assertThat(userScope.user).isNull()
+        verify { todoCoordinator.goToHomeScreen() }
     }
 
     @Test
-    fun testAddTodo_navigation() {
+    fun testSelectData_navigation() {
         // Act
-        viewModel.onAddTodo()
-
+        viewModel.onSelectDate()
         // Assert
-        verify { todoCoordinator.gotoAddTodoScreen() }
+        Truth.assertThat(viewModel.showDatePickerEvent.value).isNull()
     }
 
     @Test
-    fun shouldSetWelcomeMessage() {
-        // Assume
-        coEvery { todoRepository.getTodoList(TestDataFactory.getUserId()) } returns Either.Right(
-            TestDataFactory.getTodoList()
+    fun givenEntryEmptyValues_shouldReturnValidationError() = dispatcher.runBlockingTest {
+        viewModel.onSubmit(
+            "",
+            "",
+            ""
         )
-
-        // Act
-        viewModel.onLoadTodoList()
-
-        // Assert
-        assertThat(viewModel.welcomeMessageEvent.value).isEqualTo(WELCOME_MESSAGE)
+        Truth.assertThat(viewModel.state.value?.status).isEqualTo(ResourceStatus.ERROR)
+        Truth.assertThat(viewModel.state.value?.failure)
+            .isEqualTo(TestDataFactory.getTodoValidationError())
     }
 
-
     @Test
-    fun givenTodoList_whenFetch_shouldReturnSuccess() = dispatcher.runBlockingTest {
+    fun givenAddNewTodo_shouldReturnSuccess() = dispatcher.runBlockingTest {
 
-        coEvery { todoRepository.getTodoList(TestDataFactory.getUserId()) } returns Either.Right(
-            TestDataFactory.getTodoList()
+        coEvery { todoRepository.addTodo(TestDataFactory.getNewTodo()) } returns Either.Right(
+            TestDataFactory.getNewTodo()
         )
 
         dispatcher.pauseDispatcher()
 
-        viewModel.onLoadTodoList()
+        TestDataFactory.getNewTodo()
+            .let { viewModel.onSubmit(it.name!!, it.description!!, it.dueDate!!) }
 
-        assertThat(viewModel.state.value?.status).isEqualTo(ResourceStatus.LOADING)
+        Truth.assertThat(viewModel.state.value?.status).isEqualTo(ResourceStatus.LOADING)
 
         dispatcher.resumeDispatcher()
 
-        coVerify { todoRepository.getTodoList(TestDataFactory.getUserId()) }
+        coVerify { todoRepository.addTodo(TestDataFactory.getNewTodo()) }
 
-        assertThat(viewModel.state.value?.status).isEqualTo(ResourceStatus.SUCCESS)
+        Truth.assertThat(viewModel.state.value?.status).isEqualTo(ResourceStatus.SUCCESS)
     }
 
     @Test
-    fun givenError_whenFetch_shouldReturnFailure() = dispatcher.runBlockingTest {
+    fun givenAddNewTodo_shouldReturnFailure() = dispatcher.runBlockingTest {
         // prepare mock interactions
-        coEvery { todoRepository.getTodoList(TestDataFactory.getUserId()) } returns Either.Left(
+        coEvery { todoRepository.addTodo(TestDataFactory.getNewTodo()) } returns Either.Left(
             TestDataFactory.getDataError()
         )
         // suspend the function
         dispatcher.pauseDispatcher()
 
         // call the unit to be tested
-        viewModel.onLoadTodoList()
+        TestDataFactory.getNewTodo()
+            .let { viewModel.onSubmit(it.name!!, it.description!!, it.dueDate!!) }
 
         //verify interactions and state if necessary
-        assertThat(viewModel.state.value?.status).isEqualTo(ResourceStatus.LOADING)
+        Truth.assertThat(viewModel.state.value?.status).isEqualTo(ResourceStatus.LOADING)
 
         // resume the function
         dispatcher.resumeDispatcher()
 
         //verify interactions and state if necessary
-        coVerify { todoRepository.getTodoList(TestDataFactory.getUserId()) }
+        coVerify { todoRepository.addTodo(TestDataFactory.getNewTodo()) }
 
-        assertThat(viewModel.state.value?.status).isEqualTo(ResourceStatus.ERROR)
+        Truth.assertThat(viewModel.state.value?.status).isEqualTo(ResourceStatus.ERROR)
     }
 }

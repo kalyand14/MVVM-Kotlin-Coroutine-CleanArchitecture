@@ -15,7 +15,7 @@ class TestDataFactory {
         fun getTodo(
             todoId: String = UUID.randomUUID().toString(),
             userId: String = getUserId(),
-            name: String = "kalyan",
+            name: String = "New project",
             description: String = "complete this project",
             dueDate: String = "28/05/2018",
             isCompleted: Boolean = false
@@ -27,6 +27,14 @@ class TestDataFactory {
             dueDate = dueDate,
             isCompleted = isCompleted
         )
+
+        fun getNewTodo() =
+            Todo(
+                userId = getUserId(),
+                name = "New project",
+                description = "complete this project",
+                dueDate = "28/05/2018"
+            )
 
         fun getNewUser() = User(null, "kalyan", "password")
 
@@ -45,6 +53,11 @@ class TestDataFactory {
 
         fun getDataError() = Failure.DataError(TestDataFactory.NOT_FOUND)
 
-        fun getValidationError() = Failure.ValidationDataError("Incorrect username and password")
+        fun getUserValidationError() =
+            Failure.ValidationDataError("Incorrect username and password")
+
+        fun getTodoValidationError() =
+            Failure.ValidationDataError("Enter all the mandatory fields")
+
     }
 }

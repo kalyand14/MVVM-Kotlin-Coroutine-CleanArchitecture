@@ -3,7 +3,7 @@ package com.android.basics.features.todo.domain.model
 import java.util.*
 
 data class Todo(
-    var todoId: String = UUID.randomUUID().toString(),
+    var todoId: String? = null,
     var userId: String,
     var name: String?,
     var description: String?,

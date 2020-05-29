@@ -37,7 +37,7 @@ class EditTodoViewModel(
         deleteTodoState.value = Resource.loading()
         todoScope.todo?.let {
             viewModelScope.launch {
-                when (val result = todoRepository.deleteTodo(it.todoId)) {
+                when (val result = todoRepository.deleteTodo(it.todoId!!)) {
                     is Either.Right -> {
                         editTodoState.postValue(Resource.success(null))
                     }

@@ -63,7 +63,7 @@ class LoginViewModelTest {
         )
         Truth.assertThat(viewModel.state.value?.status).isEqualTo(ResourceStatus.ERROR)
         Truth.assertThat(viewModel.state.value?.failure)
-            .isEqualTo(TestDataFactory.getValidationError())
+            .isEqualTo(TestDataFactory.getUserValidationError())
     }
 
     /***
