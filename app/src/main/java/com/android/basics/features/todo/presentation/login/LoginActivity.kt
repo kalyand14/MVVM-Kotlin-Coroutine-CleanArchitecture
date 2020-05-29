@@ -36,11 +36,11 @@ class LoginActivity : AppCompatActivity() {
         initViews()
     }
 
-   private fun initViews() {
-        btnLogin = findViewById(R.id.btn_add_todo)
+    private fun initViews() {
+        btnLogin = findViewById(R.id.btn_login)
         btnRegister = findViewById(R.id.btn_signup)
-        edtUserName = findViewById(R.id.edt_todo_name)
-        edtPassword = findViewById(R.id.edt_todo_description)
+        edtUserName = findViewById(R.id.edt_login_username)
+        edtPassword = findViewById(R.id.edt_login_password)
         builder = AlertDialog.Builder(this)
         intProgressDialog()
 
@@ -74,7 +74,7 @@ class LoginActivity : AppCompatActivity() {
         progressDialog.cancel()
     }
 
-    private fun showAuthenticationError(errorMsg: String = "There was a problem logging in. Check your credentials or create an account.") {
+    private fun showAuthenticationError(errorMsg: String = getString(R.string.login_credential_error)) {
         edtUserName.setText("")
         edtPassword.setText("")
 
