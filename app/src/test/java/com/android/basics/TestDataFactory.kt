@@ -1,6 +1,7 @@
 package com.android.basics
 
 import com.android.basics.core.exception.Failure
+import com.android.basics.features.todo.data.source.local.entity.UserTbl
 import com.android.basics.features.todo.domain.model.Todo
 import com.android.basics.features.todo.domain.model.User
 import com.android.basics.features.todo.scope.TodoScope
@@ -11,7 +12,7 @@ class TestDataFactory {
 
     companion object Factory {
 
-        const val NOT_FOUND = "not found"
+        const val NOT_FOUND = "Not found"
 
         fun getTodo(
             todoId: String = UUID.randomUUID().toString(),
@@ -36,6 +37,8 @@ class TestDataFactory {
                 description = "complete this project",
                 dueDate = "28/05/2018"
             )
+
+
 
         fun getNewUser() = User(null, "kalyan", "password")
 
@@ -63,7 +66,7 @@ class TestDataFactory {
             getTodo(todoId = "3")
         )
 
-        fun getDataError() = Failure.DataError(TestDataFactory.NOT_FOUND)
+        fun getDataError() = Failure.DataError(NOT_FOUND)
 
         fun getUserValidationError() =
             Failure.ValidationDataError("Incorrect username and password")
