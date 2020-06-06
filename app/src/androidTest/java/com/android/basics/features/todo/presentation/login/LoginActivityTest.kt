@@ -5,6 +5,7 @@ import androidx.test.filters.LargeTest
 import androidx.test.rule.ActivityTestRule
 import com.android.basics.TestDataFactory
 import com.android.basics.features.todo.presentation.robot.login
+import com.android.basics.features.todo.presentation.robot.signUp
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -16,6 +17,19 @@ class LoginActivityTest {
     @get:Rule
     val activityRule: ActivityTestRule<LoginActivity> =
         ActivityTestRule(LoginActivity::class.java)
+
+    @Test
+    fun checkAllFieldsAreShown() {
+        login {
+            isLoginScreen()
+            isHeaderShown()
+            isUserNameLabelShown()
+            isPasswordLabelShown()
+            isLoginButtonShown()
+            isSignUpButtonShown()
+            isSignUpButtonLabelShown()
+        }
+    }
 
     @Test
     fun loginMissingUserName() {
@@ -54,6 +68,16 @@ class LoginActivityTest {
             setUserName(TestDataFactory.getNewUser().userName!!)
             setPassword(TestDataFactory.getNewUser().passWord!!)
             clickLogin()
+        }
+    }
+
+    @Test
+    fun signUp() {
+        login {
+            clickSignUp()
+        }
+        signUp {
+            isSignUpScreen()
         }
     }
 
