@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/colorBackground"
     tools:context=".features.todo.presentation.login.LoginActivity">
 
     <TextView
@@ -18,13 +19,12 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.761" />
 
-    <androidx.cardview.widget.CardView
+    <com.google.android.material.card.MaterialCardView
         android:id="@+id/crd_login"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="16dp"
         android:defaultFocusHighlightEnabled="true"
-        app:cardCornerRadius="3dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
@@ -45,50 +45,50 @@
                 android:textAlignment="center"
                 android:textColor="@color/colorAccent"
                 android:visibility="gone"
-                app:layout_constraintBottom_toTopOf="@+id/txt_todo_name"
+                app:layout_constraintBottom_toTopOf="@+id/txt_signup_username"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
             <TextView
-                android:id="@+id/txt_todo_name"
+                android:id="@+id/txt_signup_username"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/username"
-                app:layout_constraintBottom_toBottomOf="@+id/txt_todo_description"
+                app:layout_constraintBottom_toBottomOf="@+id/txt_signup_password"
                 app:layout_constraintTop_toTopOf="parent" />
 
             <EditText
-                android:id="@+id/edt_todo_name"
+                android:id="@+id/edt_signup_username"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:ems="10"
                 android:inputType="textPersonName"
                 android:text=""
-                app:layout_constraintBaseline_toBaselineOf="@+id/txt_todo_name"
-                app:layout_constraintStart_toEndOf="@+id/txt_todo_name"
-                app:layout_constraintStart_toStartOf="@+id/edt_todo_description" />
+                app:layout_constraintBaseline_toBaselineOf="@+id/txt_signup_username"
+                app:layout_constraintStart_toEndOf="@+id/txt_signup_username"
+                app:layout_constraintStart_toStartOf="@+id/edt_signup_password" />
 
             <TextView
-                android:id="@+id/txt_todo_description"
+                android:id="@+id/txt_signup_password"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/password"
-                app:layout_constraintBaseline_toBaselineOf="@+id/edt_todo_description"
+                app:layout_constraintBaseline_toBaselineOf="@+id/edt_signup_password"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/txt_todo_name" />
+                app:layout_constraintTop_toBottomOf="@+id/txt_signup_username" />
 
 
             <EditText
-                android:id="@+id/edt_todo_description"
+                android:id="@+id/edt_signup_password"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:ems="10"
                 android:inputType="textPassword"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/edt_todo_name" />
+                app:layout_constraintTop_toBottomOf="@+id/edt_signup_username" />
 
             <Button
-                android:id="@+id/btn_add_todo"
+                android:id="@+id/btn_login"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="16dp"
@@ -96,16 +96,17 @@
                 app:layout_constraintEnd_toEndOf="@+id/txt_signup"
                 app:layout_constraintEnd_toStartOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/edt_todo_description" />
+                app:layout_constraintTop_toBottomOf="@+id/edt_signup_password" />
 
             <TextView
                 android:id="@+id/txt_signup"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/don_t_have_an_account"
+                android:layout_marginRight="16dp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toStartOf="@+id/btn_signup"
-                app:layout_constraintTop_toBottomOf="@+id/btn_add_todo" />
+                app:layout_constraintTop_toBottomOf="@+id/btn_login" />
 
             <Button
                 android:id="@+id/btn_signup"
@@ -113,12 +114,12 @@
                 android:layout_height="wrap_content"
                 android:text="@string/sign_up"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/btn_add_todo" />
+                app:layout_constraintTop_toBottomOf="@+id/btn_login" />
 
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
 
-    </androidx.cardview.widget.CardView>
+    </com.google.android.material.card.MaterialCardView>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

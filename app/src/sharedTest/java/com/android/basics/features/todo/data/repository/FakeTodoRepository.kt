@@ -9,7 +9,6 @@ import java.util.*
 
 class FakeTodoRepository(var todoList: MutableList<Todo>? = mutableListOf()) : TodoRepository {
 
-
     override suspend fun getTodoList(userId: String): Either<Failure, List<Todo>> {
         // Simulate network by delaying the execution.
         todoList?.let { return Either.Right(ArrayList(it)) }
@@ -36,9 +35,9 @@ class FakeTodoRepository(var todoList: MutableList<Todo>? = mutableListOf()) : T
         return Either.Right(true)
     }
 
-    override suspend fun addTodo(todo: Todo): Either<Failure, Boolean> {
+    override suspend fun addTodo(todo: Todo): Either<Failure, Todo> {
         todoList?.add(todo)
-        return Either.Right(true)
+        return Either.Right(todo)
     }
 
     override suspend fun deleteTodo(todoId: String): Either<Failure, Boolean> {

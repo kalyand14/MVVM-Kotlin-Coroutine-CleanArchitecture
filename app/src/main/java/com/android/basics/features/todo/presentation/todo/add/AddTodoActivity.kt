@@ -1,16 +1,10 @@
 package com.android.basics.features.todo.presentation.todo.add
 
-import android.app.DatePickerDialog
-import android.app.DatePickerDialog.OnDateSetListener
 import android.app.ProgressDialog
 import android.content.DialogInterface
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
-import android.widget.Button
-import android.widget.DatePicker
-import android.widget.EditText
-import android.widget.ImageButton
 import androidx.activity.viewModels
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
@@ -20,18 +14,20 @@ import com.android.basics.core.di.ServiceLocator
 import com.android.basics.core.exception.Failure
 import com.android.basics.core.extension.getViewModelFactory
 import com.android.basics.core.functional.ResourceStatus
+import com.google.android.material.button.MaterialButton
+import com.google.android.material.datepicker.MaterialDatePicker
+import com.google.android.material.textfield.TextInputEditText
+import java.text.SimpleDateFormat
 import java.util.*
 
 
 class AddTodoActivity : AppCompatActivity() {
 
     private val viewModel by viewModels<AddTodoViewModel> { getViewModelFactory() }
-    private lateinit var edtName: EditText
-    private lateinit var edtDescription: EditText
-    private lateinit var edtDate: EditText
-    private lateinit var btnSubmit: Button
-    private lateinit var btnCancel: Button
-    private lateinit var btnDate: ImageButton
+    private lateinit var edtName: TextInputEditText
+    private lateinit var edtDescription: TextInputEditText
+    private lateinit var edtDate: TextInputEditText
+    private lateinit var btnSubmit: MaterialButton
     private lateinit var progressDialog: ProgressDialog
     private lateinit var builder: AlertDialog.Builder
 
@@ -51,8 +47,6 @@ class AddTodoActivity : AppCompatActivity() {
         edtDate = findViewById(R.id.edt_todo_add_date)
 
         btnSubmit = findViewById(R.id.btn_todo_todo_submit)
-        btnCancel = findViewById(R.id.btn_todo_add_cancel)
-        btnDate = findViewById(R.id.btn_todo_add_date)
         intProgressDialog()
         btnSubmit.setOnClickListener {
             viewModel.onSubmit(
@@ -61,8 +55,7 @@ class AddTodoActivity : AppCompatActivity() {
                 edtDate.text.toString()
             )
         }
-        btnCancel.setOnClickListener { viewModel.onCancel() }
-        btnDate.setOnClickListener { viewModel.onSelectDate() }
+        edtDate.setOnClickListener { viewModel.onSelectDate() }
     }
 
     private fun intProgressDialog() {
@@ -114,26 +107,19 @@ class AddTodoActivity : AppCompatActivity() {
         alert.show()
     }
 
+    private val outputDateFormat = SimpleDateFormat("dd/MM/yyyy", Locale.getDefault()).apply {
+        timeZone = TimeZone.getTimeZone("UTC")
+    }
 
     private fun showDatePickerDialog() {
-        val mYear: Int
-        val mMonth: Int
-        val mDay: Int
-        var mHour: Int
-        var mMinute: Int
-        // Get Current Date
-        val c: Calendar = Calendar.getInstance()
-        mYear = c.get(Calendar.YEAR)
-        mMonth = c.get(Calendar.MONTH)
-        mDay = c.get(Calendar.DAY_OF_MONTH)
-        val datePickerDialog = DatePickerDialog(
-            this,
-            OnDateSetListener { view: DatePicker?, year: Int, monthOfYear: Int, dayOfMonth: Int ->
-                edtDate.setText("$dayOfMonth/${monthOfYear + 1}/$year")
-            },
-            mYear, mMonth, mDay
-        )
-        datePickerDialog.show()
+        val builder: MaterialDatePicker.Builder<Long> =
+            MaterialDatePicker.Builder.datePicker()
+        builder.setSelection(MaterialDatePicker.todayInUtcMilliseconds())
+        val picker: MaterialDatePicker<Long> = builder.build()
+        picker.addOnPositiveButtonClickListener {
+            edtDate.setText(outputDateFormat.format(it))
+        }
+        picker.show(supportFragmentManager, picker.toString())
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {

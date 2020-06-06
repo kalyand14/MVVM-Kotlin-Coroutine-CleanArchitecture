@@ -8,15 +8,15 @@ import com.android.basics.features.todo.domain.model.User
 import java.util.*
 
 
-@Entity(tableName = "user", indices = [Index(value = ["userName", "password"], unique = true)])
+@Entity(tableName = "user", indices = [Index(value = ["userName", "passWord"], unique = true)])
 data class UserTbl(
     @PrimaryKey @ColumnInfo(name = "userId") var userId: String = UUID.randomUUID().toString(),
     @ColumnInfo(name = "userName") var userName: String = "",
-    @ColumnInfo(name = "password") var password: String = ""
+    @ColumnInfo(name = "passWord") var passWord: String = ""
 ) {
     fun toUser() = User(
         userId,
         userName,
-        password
+        passWord
     )
 }

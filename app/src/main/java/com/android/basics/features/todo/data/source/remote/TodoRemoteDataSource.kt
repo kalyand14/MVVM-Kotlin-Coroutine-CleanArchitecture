@@ -37,6 +37,7 @@ object TodoRemoteDataSource : TodoDataSource {
 
     override suspend fun editTodo(todo: Todo): Either<Failure, Boolean> =
         withContext(Dispatchers.IO) {
+            val todoId = todo.todoId!!
             val newTodo = Todo(
                 todo.todoId,
                 todo.userId,
@@ -45,7 +46,7 @@ object TodoRemoteDataSource : TodoDataSource {
                 todo.dueDate,
                 todo.isCompleted
             )
-            TODO_SERVICE_DATA[todo.todoId] = newTodo
+            TODO_SERVICE_DATA[todoId] = newTodo
             delay(SERVICE_LATENCY_IN_MILLIS)
             return@withContext Either.Right(true)
         }

@@ -16,7 +16,7 @@ object Versions {
     val androidXRecyclerview = "1.0.0"
     val androidXNavigation = "2.2.0-alpha01"
     val androidXConstraintLayout = "1.1.3"
-    val androidXMaterial = "1.1.0-alpha04"
+    val androidXMaterial = "1.3.0-alpha01"
     val androidXRoom = "2.2.2"
     val androidXLifecycle = "2.2.0"
 
