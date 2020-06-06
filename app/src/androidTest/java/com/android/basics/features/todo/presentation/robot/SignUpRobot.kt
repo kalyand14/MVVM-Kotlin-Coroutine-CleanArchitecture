@@ -7,12 +7,12 @@ fun signUp(func: SignUpRobot.() -> Unit) = SignUpRobot().apply { func() }
 
 class SignUpRobot : ScreenRobot() {
 
-    fun setUserName(userName: String) = enterTextIntoView(R.id.edt_login_username, userName)
+    fun setUserName(userName: String) = enterTextIntoView(R.id.edt_signup_username, userName)
 
     fun setPassword(password: String) =
-        enterTextIntoViewAndCloseKeyBoard(R.id.edt_login_password, password)
+        enterTextIntoViewAndCloseKeyBoard(R.id.edt_signup_password, password)
 
-    fun clickLogin() = clickOnView(R.id.btn_login);
+    fun clickLogin() = clickOnView(R.id.btn_signup);
 
     fun isValidationErrorDialogShown() =
         checkDialogWithTextIsDisplayed(R.string.login_validation_error)

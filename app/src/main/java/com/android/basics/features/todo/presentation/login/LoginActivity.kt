@@ -39,8 +39,8 @@ class LoginActivity : AppCompatActivity() {
     private fun initViews() {
         btnLogin = findViewById(R.id.btn_login)
         btnRegister = findViewById(R.id.btn_signup)
-        edtUserName = findViewById(R.id.edt_login_username)
-        edtPassword = findViewById(R.id.edt_login_password)
+        edtUserName = findViewById(R.id.edt_signup_username)
+        edtPassword = findViewById(R.id.edt_signup_password)
         builder = AlertDialog.Builder(this)
         intProgressDialog()
 
