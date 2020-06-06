@@ -9,8 +9,19 @@ import java.util.*
 
 class FakeTodoRepository(var todoList: MutableList<Todo>? = mutableListOf()) : TodoRepository {
 
+    private var shouldReturnError = false
+
+    fun setReturnError(value: Boolean) {
+        shouldReturnError = value
+    }
+
+
     override suspend fun getTodoList(userId: String): Either<Failure, List<Todo>> {
-        // Simulate network by delaying the execution.
+        if (shouldReturnError) {
+            return Either.Left(
+                Failure.ServerError
+            )
+        }
         todoList?.let { return Either.Right(ArrayList(it)) }
         return Either.Left(
             Failure.DataError(Constants.NOT_FOUND)
@@ -18,6 +29,11 @@ class FakeTodoRepository(var todoList: MutableList<Todo>? = mutableListOf()) : T
     }
 
     override suspend fun getTodo(todoId: String): Either<Failure, Todo> {
+        if (shouldReturnError) {
+            return Either.Left(
+                Failure.ServerError
+            )
+        }
         todoList?.firstOrNull { it.todoId == todoId }?.let { return Either.Right(it) }
         return Either.Left(
             Failure.DataError(Constants.NOT_FOUND)

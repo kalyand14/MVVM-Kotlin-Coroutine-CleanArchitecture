@@ -11,6 +11,7 @@ import com.android.basics.features.todo.domain.model.Todo
 import com.android.basics.features.todo.domain.repository.TodoRepository
 import com.android.basics.features.todo.presentation.components.TodoCoordinator
 import com.android.basics.features.todo.scope.UserScope
+import com.android.basics.util.wrapEspressoIdlingResource
 import kotlinx.coroutines.launch
 
 
@@ -40,11 +41,15 @@ class AddTodoViewModel(
                 else -> {
                     state.value = Resource.loading()
                     viewModelScope.launch {
-                        when (val result = todoRepository.addTodo(it)) {
-                            is Either.Right -> {
-                                state.postValue(Resource.success(null))
+                        wrapEspressoIdlingResource {
+                            when (val result = todoRepository.addTodo(it)) {
+                                is Either.Right -> {
+                                    state.postValue(Resource.success(null))
+                                }
+                                is Either.Left -> {
+                                    state.postValue(Resource.error(result.left))
+                                }
                             }
-                            is Either.Left -> state.postValue(Resource.error(result.left))
                         }
                     }
                 }

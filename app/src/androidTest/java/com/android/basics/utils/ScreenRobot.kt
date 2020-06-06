@@ -3,10 +3,13 @@ package com.android.basics.utils
 import android.R
 import android.app.Activity
 import android.content.Context
+import android.view.View
 import android.widget.DatePicker
 import androidx.annotation.IdRes
+import androidx.annotation.NonNull
 import androidx.annotation.StringRes
 import androidx.appcompat.widget.Toolbar
+import androidx.recyclerview.widget.RecyclerView
 import androidx.test.core.app.ApplicationProvider
 import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.action.ViewActions.*
@@ -16,8 +19,10 @@ import androidx.test.espresso.matcher.BoundedMatcher
 import androidx.test.espresso.matcher.RootMatchers.isDialog
 import androidx.test.espresso.matcher.RootMatchers.withDecorView
 import androidx.test.espresso.matcher.ViewMatchers.*
+import com.google.android.material.textfield.TextInputLayout
 import org.hamcrest.Description
 import org.hamcrest.Matcher
+import org.hamcrest.TypeSafeMatcher
 import org.hamcrest.core.AllOf.allOf
 import org.hamcrest.core.Is.`is`
 import org.hamcrest.core.IsEqual.equalTo
@@ -27,6 +32,17 @@ import org.hamcrest.core.IsNot.not
 open class ScreenRobot {
     private var activityContext // Only required for some calls
             : Activity? = null
+
+    private fun hasTextInputLayoutHintText(expectedErrorText: String?): Matcher<View> =
+        object : TypeSafeMatcher<View>() {
+            override fun describeTo(description: Description?) {}
+            override fun matchesSafely(item: View?): Boolean {
+                if (item !is TextInputLayout) return false
+                val error = item.hint ?: return false
+                val hint = error.toString()
+                return expectedErrorText == hint
+            }
+        }
 
     fun checkIsDisplayed(@IdRes vararg viewIds: Int) {
         for (viewId in viewIds) {
@@ -40,6 +56,10 @@ open class ScreenRobot {
             onView(withId(viewId)).check(matches(not(isDisplayed())))
         }
 
+    }
+
+    fun checkTextInputLayoutHasText(@IdRes viewId: Int, @StringRes messageResId: Int) {
+        onView(withId(viewId)).check(matches(hasTextInputLayoutHintText(getString(messageResId))))
     }
 
     fun checkViewHasText(@IdRes viewId: Int, expected: String?) {
@@ -62,6 +82,11 @@ open class ScreenRobot {
 
     }
 
+    fun replaceTextIntoView(@IdRes viewId: Int, text: String?) {
+        onView(withId(viewId)).perform(replaceText(text))
+
+    }
+
     fun enterTextIntoView(@IdRes viewId: Int, text: String?) {
         onView(withId(viewId)).perform(typeText(text))
 
@@ -72,22 +97,23 @@ open class ScreenRobot {
 
     }
 
+    fun closeKeyBoardForView(@IdRes viewId: Int) {
+        onView(withId(viewId)).perform(closeSoftKeyboard())
+    }
+
     fun enterTextIntoViewAndCloseKeyBoard(@IdRes viewId: Int, text: String?) {
         onView(withId(viewId)).perform(typeText(text))
             .perform(closeSoftKeyboard())
-
     }
 
     fun provideActivityContext(activityContext: Activity?) {
         this.activityContext = activityContext
-
     }
 
     fun checkDialogWithTextIsDisplayed(@StringRes messageResId: Int) {
         onView(withText(messageResId))
             .inRoot(withDecorView(not(activityContext!!.window.decorView)))
             .check(matches(isDisplayed()))
-
     }
 
     fun checkDialogWithButtonTextIsDisplayed(text: String?) {
@@ -153,6 +179,31 @@ open class ScreenRobot {
             .perform(PickerActions.setDate(year, monthOfYear, dayOfMonth))
         onView(withText(R.string.ok)).perform(click())
 
+    }
+
+    fun checkRecyclerViewItem(@IdRes viewId: Int, position: Int, text: String?) {
+        onView(withId(viewId))
+            .check(matches(atPosition(position, hasDescendant(withText(text)))));
+    }
+
+    private fun atPosition(
+        position: Int,
+        @NonNull itemMatcher: Matcher<View?>
+    ): Matcher<View?>? {
+        return object : BoundedMatcher<View?, RecyclerView>(RecyclerView::class.java) {
+            override fun describeTo(description: Description) {
+                description.appendText("has item at position $position: ")
+                itemMatcher.describeTo(description)
+            }
+
+            override fun matchesSafely(view: RecyclerView): Boolean {
+                val viewHolder =
+                    view.findViewHolderForAdapterPosition(position)
+                        ?: // has no item on such position
+                        return false
+                return itemMatcher.matches(viewHolder.itemView)
+            }
+        }
     }
 
 

@@ -1,9 +1,10 @@
-package com.android.basics.features.todo.presentation.login
+package com.android.basics.features.todo.presentation.signWith
 
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.filters.LargeTest
 import androidx.test.rule.ActivityTestRule
 import com.android.basics.TestDataFactory
+import com.android.basics.features.todo.presentation.registration.RegistrationActivity
 import com.android.basics.features.todo.presentation.robot.login
 import com.android.basics.features.todo.presentation.robot.signUp
 import org.junit.Rule
@@ -12,16 +13,16 @@ import org.junit.runner.RunWith
 
 @LargeTest
 @RunWith(AndroidJUnit4::class)
-class LoginActivityTest {
+class RegistrationActivityTest {
 
     @get:Rule
-    val activityRule: ActivityTestRule<LoginActivity> =
-        ActivityTestRule(LoginActivity::class.java)
+    val activityRule: ActivityTestRule<RegistrationActivity> =
+        ActivityTestRule(RegistrationActivity::class.java)
 
     @Test
     fun checkAllFieldsAreShown() {
-        login {
-            isLoginScreen()
+        signUp {
+            isSignUpScreen()
             isHeaderShown()
             isUserNameLabelShown()
             isPasswordLabelShown()
@@ -32,52 +33,41 @@ class LoginActivityTest {
     }
 
     @Test
-    fun loginMissingUserName() {
-        login {
+    fun signWithMissingUserName() {
+        signUp {
             provideActivityContext(activityRule.activity)
             setPassword(TestDataFactory.getNewUser().passWord!!)
-            clickLogin()
+            clickSignUp()
             isValidationErrorDialogShown()
         }
     }
 
     @Test
-    fun loginMissingPassword() {
-        login {
+    fun signWithMissingPassword() {
+        signUp {
             provideActivityContext(activityRule.activity)
             setUserName(TestDataFactory.getNewUser().userName!!)
-            clickLogin()
+            clickSignUp()
             isValidationErrorDialogShown()
         }
     }
 
     @Test
-    fun loginWrongPassword() {
-        login {
-            provideActivityContext(activityRule.activity)
-            setUserName(TestDataFactory.getNewUser().userName!!)
-            setPassword("wrong")
-            clickLogin()
-            isCredentialErrorDialogShown()
-        }
-    }
-
-    @Test
-    fun loginSuccess() {
-        login {
+    fun signWithSuccess() {
+        signUp {
             setUserName(TestDataFactory.getNewUser().userName!!)
             setPassword(TestDataFactory.getNewUser().passWord!!)
-            clickLogin()
-        }
-    }
-
-    @Test
-    fun signUp() {
-        login {
             clickSignUp()
         }
+    }
+
+    @Test
+    fun login() {
         signUp {
-            isSignUpScreen()
+            clickLogin()
+        }
+        login {
+            isLoginScreen()
         }
     }
 

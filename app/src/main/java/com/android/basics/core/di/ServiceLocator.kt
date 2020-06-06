@@ -39,9 +39,6 @@ object ServiceLocator {
     var userRepository: UserRepository? = null
         @VisibleForTesting set
 
-
-
-
     fun provideTodoRepository(context: Context): TodoRepository {
         synchronized(this) {
             return todoRepository

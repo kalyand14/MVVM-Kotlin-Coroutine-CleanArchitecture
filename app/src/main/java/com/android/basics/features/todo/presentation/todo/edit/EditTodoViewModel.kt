@@ -11,6 +11,7 @@ import com.android.basics.features.todo.domain.model.Todo
 import com.android.basics.features.todo.domain.repository.TodoRepository
 import com.android.basics.features.todo.presentation.components.TodoCoordinator
 import com.android.basics.features.todo.scope.TodoScope
+import com.android.basics.util.EspressoIdlingResource
 import kotlinx.coroutines.launch
 
 
@@ -35,13 +36,16 @@ class EditTodoViewModel(
 
     fun onDelete() {
         deleteTodoState.value = Resource.loading()
+
         todoScope.todo?.let {
             viewModelScope.launch {
                 when (val result = todoRepository.deleteTodo(it.todoId!!)) {
                     is Either.Right -> {
                         editTodoState.postValue(Resource.success(null))
                     }
-                    is Either.Left -> editTodoState.postValue(Resource.error(result.left))
+                    is Either.Left -> {
+                        editTodoState.postValue(Resource.error(result.left))
+                    }
                 }
             }
         }
