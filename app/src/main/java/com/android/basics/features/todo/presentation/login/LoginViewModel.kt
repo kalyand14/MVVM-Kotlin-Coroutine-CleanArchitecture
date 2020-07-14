@@ -1,5 +1,6 @@
 package com.android.basics.features.todo.presentation.login
 
+import androidx.hilt.lifecycle.ViewModelInject
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -14,7 +15,7 @@ import kotlinx.coroutines.launch
 import timber.log.Timber
 
 
-class LoginViewModel(
+class LoginViewModel @ViewModelInject constructor(
     private val todoCoordinator: TodoCoordinator,
     private val userScope: UserScope,
     private val userRepository: UserRepository

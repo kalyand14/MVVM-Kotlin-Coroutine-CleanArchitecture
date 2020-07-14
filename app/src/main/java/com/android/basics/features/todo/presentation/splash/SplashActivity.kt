@@ -5,12 +5,18 @@ import android.os.Handler
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import com.android.basics.R
-import com.android.basics.core.di.ServiceLocator
 import com.android.basics.core.extension.getViewModelFactory
+import com.android.basics.core.navigation.Navigator
+import dagger.hilt.android.AndroidEntryPoint
+import javax.inject.Inject
 
+@AndroidEntryPoint
 class SplashActivity : AppCompatActivity() {
 
-    private val viewModel by viewModels<SplashViewModel> { getViewModelFactory() }
+    @Inject
+    lateinit var navigator: Navigator
+
+    private val viewModel: SplashViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -20,11 +26,11 @@ class SplashActivity : AppCompatActivity() {
 
     override fun onStart() {
         super.onStart()
-        ServiceLocator.provideNavigator().attachView(this, lifecycle)
+        navigator.attachView(this, lifecycle)
     }
 
     override fun onPause() {
         super.onPause()
-        ServiceLocator.provideNavigator().onViewDestroyed()
+        navigator.onViewDestroyed()
     }
 }

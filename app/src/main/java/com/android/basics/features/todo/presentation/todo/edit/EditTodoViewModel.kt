@@ -1,5 +1,6 @@
 package com.android.basics.features.todo.presentation.todo.edit
 
+import androidx.hilt.lifecycle.ViewModelInject
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -15,7 +16,7 @@ import com.android.basics.util.EspressoIdlingResource
 import kotlinx.coroutines.launch
 
 
-class EditTodoViewModel(
+class EditTodoViewModel @ViewModelInject constructor(
     private val todoCoordinator: TodoCoordinator,
     private val todoRepository: TodoRepository,
     private val todoScope: TodoScope

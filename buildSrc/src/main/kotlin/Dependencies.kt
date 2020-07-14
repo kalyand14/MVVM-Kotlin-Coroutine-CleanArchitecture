@@ -63,6 +63,8 @@ object Versions {
 
     val leakCanary = "1.5"
 
+    val hiltDagger= "2.28-alpha"
+    val androidXHit= "1.0.0-alpha01"
 }
 
 
@@ -74,6 +76,7 @@ object ToolsDeps {
         "com.github.ben-manes:gradle-versions-plugin:${Versions.gradleversions}"
     val navigation_safe_args =
         "androidx.navigation:navigation-safe-args-gradle-plugin:${Versions.androidXNavigation}"
+    val hilt = "com.google.dagger:hilt-android-gradle-plugin:${Versions.hiltDagger}"
 }
 
 object ApplicationDeps {
@@ -114,6 +117,15 @@ object ApplicationDeps {
         "androidx.lifecycle:lifecycle-runtime-ktx:${Versions.androidXLifecycle}"
     val lifecycle_livedata =
         "androidx.lifecycle:lifecycle-livedata-ktx:${Versions.androidXLifecycle}"
+
+    val hilt = "com.google.dagger:hilt-android:${Versions.hiltDagger}"
+    val hiltCompiler = "com.google.dagger:hilt-android-compiler:${Versions.hiltDagger}"
+
+    val hiltViewModel = "androidx.hilt:hilt-lifecycle-viewmodel:${Versions.androidXHit}"
+    val hiltViewModelCompiler = "androidx.hilt:hilt-compiler:${Versions.androidXHit}"
+
+    val hiltWorkManager = "androidx.hilt:hilt-work:${Versions.androidXHit}"
+
 }
 
 

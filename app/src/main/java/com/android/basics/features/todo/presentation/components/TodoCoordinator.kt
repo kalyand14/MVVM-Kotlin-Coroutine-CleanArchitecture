@@ -12,9 +12,11 @@ import com.android.basics.features.todo.presentation.todo.add.AddTodoActivity
 import com.android.basics.features.todo.presentation.todo.add.AddTodoNavigator
 import com.android.basics.features.todo.presentation.todo.edit.EditTodoActivity
 import com.android.basics.features.todo.presentation.todo.edit.EditTodoNavigator
+import javax.inject.Inject
+import javax.inject.Singleton
 
-
-class TodoCoordinator(private val navigator: Navigator) : HomeScreenNavigator, SplashNavigator,
+@Singleton
+class TodoCoordinator @Inject constructor (private val navigator: Navigator) : HomeScreenNavigator, SplashNavigator,
     LoginNavigator, RegistrationNavigator, AddTodoNavigator, EditTodoNavigator {
 
     override fun goToEditTodoScreen() {

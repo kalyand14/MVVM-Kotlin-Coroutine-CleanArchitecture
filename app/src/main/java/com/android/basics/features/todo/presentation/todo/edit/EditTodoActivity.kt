@@ -14,16 +14,22 @@ import com.android.basics.core.di.ServiceLocator
 import com.android.basics.core.exception.Failure
 import com.android.basics.core.extension.getViewModelFactory
 import com.android.basics.core.functional.ResourceStatus
+import com.android.basics.core.navigation.Navigator
+import com.android.basics.features.todo.presentation.todo.add.AddTodoViewModel
 import com.google.android.material.button.MaterialButton
 import com.google.android.material.datepicker.MaterialDatePicker
 import com.google.android.material.textfield.TextInputEditText
+import dagger.hilt.android.AndroidEntryPoint
 import java.text.SimpleDateFormat
 import java.util.*
+import javax.inject.Inject
 
-
+@AndroidEntryPoint
 class EditTodoActivity : AppCompatActivity() {
+    @Inject
+    lateinit var navigator: Navigator
 
-    private val viewModel by viewModels<EditTodoViewModel> { getViewModelFactory() }
+    private val viewModel: EditTodoViewModel by viewModels()
 
     private lateinit var progressDialog: ProgressDialog
     private lateinit var builder: AlertDialog.Builder
@@ -159,12 +165,12 @@ class EditTodoActivity : AppCompatActivity() {
     override fun onPause() {
         super.onPause()
         dismissProgressDialog()
-        ServiceLocator.provideNavigator().onViewDestroyed()
+        navigator.onViewDestroyed()
     }
 
     override fun onStart() {
         super.onStart()
-        ServiceLocator.provideNavigator().attachView(this, lifecycle)
+        navigator.attachView(this, lifecycle)
         viewModel.loadTodoEvent.observe(this, Observer {
             it?.run {
                 setName(name)

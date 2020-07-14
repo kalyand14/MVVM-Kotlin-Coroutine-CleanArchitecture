@@ -10,6 +10,7 @@ buildscript {
         classpath ToolsDeps.kotlin
         classpath ToolsDeps.gradleversions
         classpath ToolsDeps.navigation_safe_args
+        classpath ToolsDeps.hilt
     }
 }
 allprojects {

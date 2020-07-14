@@ -3,8 +3,8 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/MVVM-Kotlin-Coroutine-CleanArchitecture.iml" filepath="$PROJECT_DIR$/MVVM-Kotlin-Coroutine-CleanArchitecture.iml" group="MVVM-Kotlin-Coroutine-CleanArchitecture" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/MVVM-Kotlin-Coroutine-CleanArchitecture_buildSrc.iml" filepath="$PROJECT_DIR$/.idea/modules/MVVM-Kotlin-Coroutine-CleanArchitecture_buildSrc.iml" group="MVVM-Kotlin-Coroutine-CleanArchitecture/MVVM-Kotlin-Coroutine-CleanArchitecture_buildSrc" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" group="MVVM-Kotlin-Coroutine-CleanArchitecture/app" />
-      <module fileurl="file://$PROJECT_DIR$/buildSrc/buildSrc.iml" filepath="$PROJECT_DIR$/buildSrc/buildSrc.iml" group="MVVM-Kotlin-Coroutine-CleanArchitecture/buildSrc" />
     </modules>
   </component>
 </project>

@@ -14,16 +14,24 @@ import com.android.basics.core.di.ServiceLocator
 import com.android.basics.core.exception.Failure
 import com.android.basics.core.extension.getViewModelFactory
 import com.android.basics.core.functional.ResourceStatus
+import com.android.basics.core.navigation.Navigator
+import com.android.basics.features.todo.presentation.splash.SplashViewModel
 import com.google.android.material.button.MaterialButton
 import com.google.android.material.datepicker.MaterialDatePicker
 import com.google.android.material.textfield.TextInputEditText
+import dagger.hilt.android.AndroidEntryPoint
 import java.text.SimpleDateFormat
 import java.util.*
+import javax.inject.Inject
 
-
+@AndroidEntryPoint
 class AddTodoActivity : AppCompatActivity() {
 
-    private val viewModel by viewModels<AddTodoViewModel> { getViewModelFactory() }
+    @Inject
+    lateinit var navigator: Navigator
+
+    private val viewModel: AddTodoViewModel by viewModels()
+
     private lateinit var edtName: TextInputEditText
     private lateinit var edtDescription: TextInputEditText
     private lateinit var edtDate: TextInputEditText
@@ -142,12 +150,12 @@ class AddTodoActivity : AppCompatActivity() {
     override fun onPause() {
         super.onPause()
         dismissProgressDialog()
-        ServiceLocator.provideNavigator().onViewDestroyed()
+        navigator.onViewDestroyed()
     }
 
     override fun onStart() {
         super.onStart()
-        ServiceLocator.provideNavigator().attachView(this, lifecycle)
+        navigator.attachView(this, lifecycle)
         viewModel.state.observe(this,
             Observer {
                 when (it.status) {

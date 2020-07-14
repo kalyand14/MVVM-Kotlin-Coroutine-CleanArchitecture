@@ -2,7 +2,7 @@ apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-kapt'
 apply plugin: 'kotlin-android-extensions'
-
+apply plugin: 'dagger.hilt.android.plugin'
 dependencies {
 
     //Application dependencies
@@ -17,6 +17,11 @@ dependencies {
     implementation ApplicationDeps.androidXAnnotations
     implementation ApplicationDeps.androidXLegacySupport
 
+    implementation ApplicationDeps.hilt
+    kapt ApplicationDeps.hiltCompiler
+    implementation ApplicationDeps.hiltViewModel
+    kapt ApplicationDeps.hiltViewModelCompiler
+    implementation ApplicationDeps.hiltWorkManager
 
     // Architecture Components
     implementation ApplicationDeps.androidXRoom
@@ -67,7 +72,11 @@ dependencies {
     implementation AndroidTestDeps.espressoIdlingResource
     androidTestImplementation AndroidTestDeps.espressoIdlingConcurrent
     androidTestImplementation AndroidTestDeps.robolectricAnnotation
-    androidTestImplementation AndroidTestDeps.truth
+    //androidTestImplementation AndroidTestDeps.truth
+
+    androidTestImplementation ('com.google.truth:truth:1.0') {
+        exclude group: "com.google.code.findbugs", module: "jsr305"
+    }
 
     // Resolve conflicts between main and test APK:
     androidTestImplementation ApplicationDeps.androidXAnnotations

@@ -1,5 +1,6 @@
 package com.android.basics.features.todo.presentation.registration
 
+import androidx.hilt.lifecycle.ViewModelInject
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -13,7 +14,7 @@ import com.android.basics.features.todo.scope.UserScope
 import kotlinx.coroutines.launch
 import timber.log.Timber
 
-class RegistrationViewModel(
+class RegistrationViewModel @ViewModelInject constructor(
     private val todoCoordinator: TodoCoordinator,
     private val userScope: UserScope,
     private val userRepository: UserRepository

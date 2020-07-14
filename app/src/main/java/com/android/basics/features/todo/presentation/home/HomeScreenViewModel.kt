@@ -1,5 +1,6 @@
 package com.android.basics.features.todo.presentation.home
 
+import androidx.hilt.lifecycle.ViewModelInject
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -14,7 +15,7 @@ import com.android.basics.features.todo.scope.UserScope
 import kotlinx.coroutines.launch
 
 
-class HomeScreenViewModel(
+class HomeScreenViewModel @ViewModelInject constructor(
     private val todoRepository: TodoRepository,
     private val coordinator: TodoCoordinator,
     private val userScope: UserScope

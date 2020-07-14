@@ -15,12 +15,19 @@ import com.android.basics.core.di.ServiceLocator
 import com.android.basics.core.exception.Failure
 import com.android.basics.core.extension.getViewModelFactory
 import com.android.basics.core.functional.ResourceStatus
+import com.android.basics.core.navigation.Navigator
+import com.android.basics.features.todo.presentation.splash.SplashViewModel
 import com.android.basics.features.todo.scope.UserScope
+import dagger.hilt.android.AndroidEntryPoint
+import javax.inject.Inject
 
-
+@AndroidEntryPoint
 class LoginActivity : AppCompatActivity() {
 
-    private val viewModel by viewModels<LoginViewModel> { getViewModelFactory() }
+    @Inject
+    lateinit var navigator: Navigator
+
+    private val viewModel: LoginViewModel by viewModels()
 
     private lateinit var progressDialog: ProgressDialog
     private lateinit var btnLogin: Button
@@ -93,7 +100,7 @@ class LoginActivity : AppCompatActivity() {
     override fun onStart() {
         super.onStart()
 
-        ServiceLocator.provideNavigator().attachView(this, lifecycle)
+        navigator.attachView(this, lifecycle)
 
         viewModel.state.observe(this,
             Observer {
@@ -115,6 +122,6 @@ class LoginActivity : AppCompatActivity() {
     override fun onPause() {
         super.onPause()
         dismissProgressDialog()
-        ServiceLocator.provideNavigator().onViewDestroyed()
+        navigator.onViewDestroyed()
     }
 }

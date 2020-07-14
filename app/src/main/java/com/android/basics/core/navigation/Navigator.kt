@@ -4,11 +4,11 @@ import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleObserver
-import androidx.lifecycle.OnLifecycleEvent
 import java.lang.ref.WeakReference
 
 
-class Navigator(private val intentFactory: IntentFactory) : BaseNavigator, LifecycleObserver {
+class Navigator constructor(private val intentFactory: IntentFactory) : BaseNavigator,
+    LifecycleObserver {
 
     private var contextWeakRef: WeakReference<AppCompatActivity?>? = null
     private var viewLifecycle: Lifecycle? = null

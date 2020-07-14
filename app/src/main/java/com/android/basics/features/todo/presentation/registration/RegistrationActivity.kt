@@ -14,12 +14,20 @@ import com.android.basics.core.di.ServiceLocator
 import com.android.basics.core.exception.Failure
 import com.android.basics.core.extension.getViewModelFactory
 import com.android.basics.core.functional.ResourceStatus
+import com.android.basics.core.navigation.Navigator
+import com.android.basics.features.todo.presentation.login.LoginViewModel
+import dagger.hilt.android.AndroidEntryPoint
 import timber.log.Timber
+import javax.inject.Inject
 
-
+@AndroidEntryPoint
 class RegistrationActivity : AppCompatActivity() {
 
-    private val viewModel by viewModels<RegistrationViewModel> { getViewModelFactory() }
+    @Inject
+    lateinit var navigator: Navigator
+
+    private val viewModel: RegistrationViewModel by viewModels()
+
     private lateinit var progressDialog: ProgressDialog
     private lateinit var btnLogin: Button
     private lateinit var btnRegister: Button
@@ -103,7 +111,7 @@ class RegistrationActivity : AppCompatActivity() {
 
     override fun onStart() {
         super.onStart()
-        ServiceLocator.provideNavigator().attachView(this, lifecycle)
+        navigator.attachView(this, lifecycle)
         viewModel.state.observe(this,
             Observer {
                 when (it.status) {
@@ -127,6 +135,6 @@ class RegistrationActivity : AppCompatActivity() {
     override fun onPause() {
         super.onPause()
         dismissProgressDialog()
-        ServiceLocator.provideNavigator().onViewDestroyed()
+        navigator.onViewDestroyed()
     }
 }

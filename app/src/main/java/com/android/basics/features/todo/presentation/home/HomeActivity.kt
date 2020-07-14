@@ -18,19 +18,28 @@ import com.android.basics.R
 import com.android.basics.core.di.ServiceLocator
 import com.android.basics.core.extension.getViewModelFactory
 import com.android.basics.core.functional.ResourceStatus
+import com.android.basics.core.navigation.Navigator
 import com.android.basics.features.todo.domain.model.Todo
 import com.android.basics.features.todo.presentation.home.components.TodoListAdapter
+import com.android.basics.features.todo.presentation.login.LoginViewModel
 import com.google.android.material.floatingactionbutton.FloatingActionButton
+import dagger.hilt.android.AndroidEntryPoint
 import timber.log.Timber
+import javax.inject.Inject
 
-
+@AndroidEntryPoint
 class HomeActivity : AppCompatActivity() {
 
-    private val viewModel by viewModels<HomeScreenViewModel> { getViewModelFactory() }
+    @Inject
+    lateinit var navigator: Navigator
+
+    @Inject
+    lateinit var todoListAdapter: TodoListAdapter
+
+    private val viewModel: HomeScreenViewModel by viewModels()
 
     private lateinit var progressDialog: ProgressDialog
     private lateinit var recyclerView: RecyclerView
-    private lateinit var todoListAdapter: TodoListAdapter
     private lateinit var layoutManager: LinearLayoutManager
     private lateinit var txtError: TextView
     private lateinit var floatingActionButton: FloatingActionButton
@@ -51,7 +60,6 @@ class HomeActivity : AppCompatActivity() {
         recyclerView.itemAnimator = DefaultItemAnimator()
 
         injectView(this)
-        injectObject(this)
 
         recyclerView.adapter = todoListAdapter
 
@@ -64,14 +72,10 @@ class HomeActivity : AppCompatActivity() {
         activity.progressDialog.setMessage("Logging in")
     }
 
-    private fun injectObject(activity: HomeActivity) {
-        activity.todoListAdapter = ServiceLocator.provideTodoListAdapter()
-    }
-
 
     override fun onStart() {
         super.onStart()
-        ServiceLocator.provideNavigator().attachView(this, lifecycle)
+        navigator.attachView(this, lifecycle)
 
         viewModel.welcomeMessageEvent.observe(this, Observer { setWelcomeMessage(it) });
         viewModel.state.observe(this,
